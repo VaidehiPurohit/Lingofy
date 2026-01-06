@@ -1,0 +1,11 @@
+<svg width="360" height="80" viewBox="0 0 360 80" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .brand {
+      font-family: 'Segoe UI', 'Inter', 'Arial', sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      fill: #1f2a44;
+    }
+  </style>
+  <text x="20" y="52" font-size="42" class="brand">Lingofy</text>
+</svg>
