@@ -12,6 +12,9 @@ import Quiz from './components/Dashboard/Quiz';
 import Progress from './components/Dashboard/Progress';
 import Profile from './components/Dashboard/Profile';
 import Slang from './components/Dashboard/Slang';
+import PEstructure from './components/Slangs/PopularExpression/PEstructure'
+import CGstructure from './components/Slangs/CasualGreeting/CGStructure'
+import YSstructure from './components/Slangs/YouthSlang/YSstructure'
 
 const App = () => {
   return (
@@ -39,7 +42,20 @@ const App = () => {
         <Route path="profile" element={<Profile />} />
         <Route path="slang" element={<Slang />} />
         <Route path="home" element={<Home />} />
+        <Route
+  path="/dashboard/slang/casual-greetings"
+  element={<CGstructure />}
+/>
+        <Route
+  path="/dashboard/slang/popular-expressions"
+  element={<PEstructure />}
+/>
+        <Route
+  path="/dashboard/slang/youth-slang"
+  element={<YSstructure />}
+/>
       </Route>
+      
     </Routes>
 
 
