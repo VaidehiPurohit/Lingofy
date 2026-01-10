@@ -16,6 +16,12 @@ import PEstructure from './components/Slangs/PopularExpression/PEstructure'
 import CGstructure from './components/Slangs/CasualGreeting/CGStructure'
 import YSstructure from './components/Slangs/YouthSlang/YSstructure'
 import SSstructure from './components/Slangs/SocialSlang/SSstructure'
+import RestaurantPage from './components/Scenes/Restaurant/RestaurantPage'
+import ShoppingPage from './components/Scenes/Shopping/ShoppingPage'
+import AirPortPage from './components/Scenes/Airport/AirPortPage'
+import UniversityPage from './components/Scenes/University/UniversityPage'
+import InterviewPage from './components/Scenes/Interview/InterviewPage'
+import DoctorPage from './components/Scenes/Doctor/DoctorPage'
 
 const App = () => {
   return (
@@ -35,15 +41,24 @@ const App = () => {
 
       {/* Dashboard */}
       <Route path="/dashboard" element={<Dashboard />}>
+
         <Route index element={<DashboardHome />} />
+        <Route path="home" element={<Home />} />
         <Route path="lessons" element={<Lessons />} />
         <Route path="scenes" element={<Scenes />} />
+        <Route>
+          <Route path="/dashboard/scenes/restaurant" element={<RestaurantPage />} />
+          <Route path="/dashboard/scenes/shopping" element={<ShoppingPage />} />
+          <Route path="/dashboard/scenes/airport" element={<AirPortPage />} />
+          <Route path="/dashboard/scenes/university" element={<UniversityPage />} />
+          <Route path="/dashboard/scenes/interview" element={<InterviewPage />} />
+          <Route path="/dashboard/scenes/doctor-appointment" element={<DoctorPage />} />
+        </Route>
         <Route path="quiz" element={<Quiz />} />
         <Route path="progress" element={<Progress />} />
         <Route path="profile" element={<Profile />} />
         <Route path="slang" element={<Slang />} />
-        <Route path="home" element={<Home />} />
-        <Route
+         <Route
   path="/dashboard/slang/casual-greetings"
   element={<CGstructure />}
 />
@@ -60,6 +75,8 @@ const App = () => {
   element={<SSstructure/>}
 />
       </Route>
+        
+       
       
     </Routes>
 
