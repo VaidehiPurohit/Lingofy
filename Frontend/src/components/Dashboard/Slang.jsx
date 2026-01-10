@@ -72,6 +72,7 @@ const Slang = () => {
           gradient="bg-gradient-to-r from-sky-500 to-cyan-500"
           hoverBorder="hover:border-cyan-400"
           icon={Users}
+          onClick={() => navigate("/dashboard/slang/social-slang")}
         />
         <PhraseCard
           title="Bollywood & Pop Culture"
