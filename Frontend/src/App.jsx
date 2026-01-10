@@ -15,6 +15,7 @@ import Slang from './components/Dashboard/Slang';
 import PEstructure from './components/Slangs/PopularExpression/PEstructure'
 import CGstructure from './components/Slangs/CasualGreeting/CGStructure'
 import YSstructure from './components/Slangs/YouthSlang/YSstructure'
+// import SSstructure from './components/Slangs/SocialSlang/SSstructure'
 
 const App = () => {
   return (
@@ -54,6 +55,10 @@ const App = () => {
   path="/dashboard/slang/youth-slang"
   element={<YSstructure />}
 />
+        {/* <Route
+  path="/dashboard/slang/Social-slang"
+  element={<SSstructure/>}
+/> */}
       </Route>
       
     </Routes>

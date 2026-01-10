@@ -31,7 +31,7 @@ const Footer = () => {
             href="#"
             className="hover:text-black transition"
           >
-            Lingofy
+              Lingofy
           </a>
           . All rights reserved.
         </p>
