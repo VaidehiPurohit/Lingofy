@@ -7,7 +7,7 @@ const Slang = () => {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-semibold">
+        <h1 className="text-2xl font-semibold">
           Slangs and Expression
         </h1>
         <p className="text-gray-500 mt-1">
@@ -86,6 +86,7 @@ const Slang = () => {
           gradient="bg-gradient-to-r from-fuchsia-500 to-pink-500"
           hoverBorder="hover:border-fuchsia-400"
           icon={Film}
+          onClick={() => navigate("/dashboard/slang/pop-slang")}
         />
         <PhraseCard
           title="Reactions & Exclamations"
@@ -99,6 +100,7 @@ const Slang = () => {
           gradient="bg-gradient-to-r from-rose-400 to-pink-500"
           hoverBorder="hover:border-rose-400"
           icon={Smile}
+          onClick={() => navigate("/dashboard/slang/reactions")}
         />
 
       </div>

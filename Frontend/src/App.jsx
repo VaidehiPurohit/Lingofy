@@ -22,6 +22,9 @@ import AirPortPage from './components/Scenes/Airport/AirPortPage'
 import UniversityPage from './components/Scenes/University/UniversityPage'
 import InterviewPage from './components/Scenes/Interview/InterviewPage'
 import DoctorPage from './components/Scenes/Doctor/DoctorPage'
+import PopStructure from './components/Slangs/PopSlang/PopStructure'
+import ReactStructure from './components/Slangs/Reactions/ReactStructure'
+import Results from './Quiz/Results'
 
 const App = () => {
   return (
@@ -54,7 +57,8 @@ const App = () => {
           <Route path="/dashboard/scenes/interview" element={<InterviewPage />} />
           <Route path="/dashboard/scenes/doctor-appointment" element={<DoctorPage />} />
         </Route>
-        <Route path="quiz" element={<Quiz />} />
+         <Route path="quiz" element={<Quiz />} />
+  <Route path="quiz/results" element={<Results />} />
         <Route path="progress" element={<Progress />} />
         <Route path="profile" element={<Profile />} />
         <Route path="slang" element={<Slang />} />
@@ -73,6 +77,14 @@ const App = () => {
         <Route
   path="/dashboard/slang/Social-slang"
   element={<SSstructure/>}
+/>
+        <Route
+  path="/dashboard/slang/pop-slang"
+  element={<PopStructure/>}
+/>
+        <Route
+  path="/dashboard/slang/reactions"
+  element={<ReactStructure/>}
 />
       </Route>
         

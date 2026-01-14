@@ -8,7 +8,7 @@ const Scenes = () => {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-semibold">
+        <h1 className="text-2xl font-semibold">
           Conversation Scenes
         </h1>
         <p className="text-m text-gray-500 mt-1">
