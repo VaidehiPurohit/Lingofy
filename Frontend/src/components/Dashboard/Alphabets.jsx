@@ -1,7 +1,6 @@
 import React from 'react'
 import Swar from '../Alphabets/Swar'
 import Vyanjan from '../Alphabets/Vyanjan'
-
 const Alphabets = () => {
     return (
 
@@ -39,5 +38,4 @@ const Alphabets = () => {
 
     )
 }
-
 export default Alphabets

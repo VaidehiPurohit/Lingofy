@@ -6,7 +6,8 @@ import {
   ArrowRight,
   RotateCcw,
 } from "lucide-react";
-import { useState, useEffect } from "react";
+
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 const SpeakingPractice = ({ data }) => {
@@ -17,9 +18,16 @@ const SpeakingPractice = ({ data }) => {
   const [isComplete, setIsComplete] = useState(false);
   const [seconds, setSeconds] = useState(0);
   const [showTranscription, setShowTranscription] = useState(false);
+  const [recognizedText, setRecognizedText] = useState("");
+
+  const mediaRecorderRef = useRef(null);
+  const audioChunksRef = useRef([]);
 
   const currentWord = data[currentIndex];
 
+  // =========================
+  // TIMER
+  // =========================
   useEffect(() => {
     let interval;
 
@@ -32,20 +40,110 @@ const SpeakingPractice = ({ data }) => {
     return () => clearInterval(interval);
   }, [isRecording]);
 
-  const handleMicClick = () => {
+  // =========================
+  // 🔊 TTS — PLAY REFERENCE
+  // =========================
+  const playReferenceAudio = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/tts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          text: currentWord.hindi || currentWord.transliteration,
+        }),
+      });
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+
+      new Audio(url).play();
+    } catch (err) {
+      console.error("TTS error:", err);
+    }
+  };
+
+  // =========================
+  // 🎤 START / STOP RECORDING
+  // =========================
+  const handleMicClick = async () => {
+    // START RECORDING
     if (!isRecording && !isComplete) {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+      });
+
+      const recorder = new MediaRecorder(stream, {
+        mimeType: "audio/webm",
+      });
+
+      mediaRecorderRef.current = recorder;
+      audioChunksRef.current = [];
+
+      recorder.ondataavailable = (e) => {
+        audioChunksRef.current.push(e.data);
+      };
+
+      recorder.onstop = sendAudio;
+
+      recorder.start();
+
       setIsRecording(true);
       setSeconds(0);
-    } else if (isRecording) {
+    }
+
+    // STOP RECORDING
+    else if (isRecording) {
+      mediaRecorderRef.current.stop();
+
       setIsRecording(false);
       setIsComplete(true);
     }
   };
 
+  // =========================
+  // 📡 SEND AUDIO → STT API
+  // =========================
+  const sendAudio = async () => {
+    try {
+      const audioBlob = new Blob(audioChunksRef.current);
+
+      console.log("Audio size:", audioBlob.size);
+
+      const formData = new FormData();
+
+      // ⭐ Flask expects "file"
+      formData.append("file", audioBlob, "recording.webm");
+
+      const response = await fetch("http://localhost:5000/stt", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      console.log("Recognized:", data.text);
+
+      setRecognizedText(data.text || "No speech detected");
+      setShowTranscription(true);
+
+      audioChunksRef.current = [];
+    } catch (err) {
+      console.error("STT error:", err);
+      setRecognizedText("Error processing audio");
+      setShowTranscription(true);
+    }
+  };
+
+  // =========================
+  // OTHER HANDLERS
+  // =========================
   const handleRetry = () => {
     setIsComplete(false);
     setSeconds(0);
     setShowTranscription(false);
+    setRecognizedText("");
   };
 
   const handleSubmit = () => {
@@ -57,6 +155,7 @@ const SpeakingPractice = ({ data }) => {
     setIsRecording(false);
     setSeconds(0);
     setShowTranscription(false);
+    setRecognizedText("");
 
     if (currentIndex < data.length - 1) {
       setCurrentIndex((prev) => prev + 1);
@@ -69,10 +168,13 @@ const SpeakingPractice = ({ data }) => {
 
   if (!currentWord) return null;
 
+  // =========================
+  // UI
+  // =========================
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-8">
 
-      {/* Header */}
+      {/* HEADER */}
       <div className="flex justify-between items-center">
         <button
           onClick={() => navigate(-1)}
@@ -87,7 +189,7 @@ const SpeakingPractice = ({ data }) => {
         </span>
       </div>
 
-      {/* Title + Progress */}
+      {/* TITLE + PROGRESS */}
       <div>
         <h1 className="text-2xl font-semibold text-gray-800">
           Speaking Practice
@@ -101,7 +203,7 @@ const SpeakingPractice = ({ data }) => {
         </div>
       </div>
 
-      {/* Reference Section */}
+      {/* 🔊 REFERENCE AUDIO */}
       <div className="bg-sky-50 border border-sky-200 rounded-2xl p-6 space-y-6">
 
         <div className="flex items-center gap-2 text-sky-700 font-medium">
@@ -118,10 +220,11 @@ const SpeakingPractice = ({ data }) => {
           </p>
         </div>
 
-        <div className="w-full h-2 bg-sky-100 rounded-full" />
-
         <div className="flex items-center gap-4">
-          <button className="flex-1 flex items-center justify-center gap-2 bg-sky-600 hover:bg-sky-700 text-white py-3 rounded-xl transition">
+          <button
+            onClick={playReferenceAudio}
+            className="flex-1 flex items-center justify-center gap-2 bg-sky-600 hover:bg-sky-700 text-white py-3 rounded-xl transition"
+          >
             <Play size={18} />
             Play Audio
           </button>
@@ -132,7 +235,7 @@ const SpeakingPractice = ({ data }) => {
         </div>
       </div>
 
-      {/* Recording Section */}
+      {/* 🎤 RECORDING */}
       <div className="bg-rose-50 border border-rose-200 rounded-2xl p-8 text-center space-y-6">
 
         <div className="flex items-center gap-2 text-rose-600 font-medium justify-start">
@@ -194,19 +297,20 @@ const SpeakingPractice = ({ data }) => {
         )}
       </div>
 
-      {/* Transcription */}
+      {/* 📝 TRANSCRIPTION */}
       {showTranscription && (
         <div className="bg-gray-100 border border-gray-200 rounded-2xl p-6">
           <p className="text-gray-600 text-sm mb-2">
             Your transcription:
           </p>
+
           <p className="text-gray-900 text-lg font-medium">
-            {currentWord.example || currentWord.english}
+            {recognizedText}
           </p>
         </div>
       )}
 
-      {/* Continue */}
+      {/* CONTINUE */}
       <div className="flex justify-between gap-6">
         <button
           onClick={handleContinue}
