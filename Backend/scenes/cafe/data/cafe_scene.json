@@ -1,0 +1,36 @@
+{
+  "scene_id": "cafe",
+  "description": "आप एक कैफ़े में हैं। आपको कॉफी ऑर्डर करनी है।",
+  "turns": [
+    {
+      "goal": "greeting",
+      "system_hindi": "नमस्ते! कैफ़े में आपका स्वागत है।",
+      "system_english": "Hello! Welcome to the cafe."
+    },
+    {
+      "goal": "order_coffee",
+      "system_hindi": "आप कौन सी कॉफी लेना चाहेंगे?",
+      "system_english": "Which coffee would you like?"
+    },
+    {
+      "goal": "additional_request",
+      "system_hindi": "क्या आपको और कुछ चाहिए?",
+      "system_english": "Would you like anything else?"
+    },
+    {
+      "goal": "payment",
+      "system_hindi": "आप भुगतान कैसे करेंगे?",
+      "system_english": "How would you like to pay?"
+    },
+    {
+      "goal": "dine_preference",
+      "system_hindi": "यहाँ पीएंगे या पैक कर दें?",
+      "system_english": "For here or to go?"
+    },
+    {
+      "goal": "closing",
+      "system_hindi": "धन्यवाद! आपका दिन शुभ हो।",
+      "system_english": "Thank you! Have a nice day."
+    }
+  ]
+}
