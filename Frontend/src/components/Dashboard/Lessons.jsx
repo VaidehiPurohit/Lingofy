@@ -1,16 +1,19 @@
-import React from 'react'
+import React from "react";
+import BegLessons from "../Lessons/Begineer/BegLessons";
 
 const Lessons = () => {
   const completedLessons = 0;
   const totalLessons = 25;
+
   const progressPercent = Math.round(
     (completedLessons / totalLessons) * 100
   );
 
   return (
     <div id="lessons" className="space-y-8">
+
       <div>
-        <h1 className="text-2xl font-semibold">
+        <h1 className="text-2xl font-semibold text-gray-800">
           Lessons
         </h1>
         <p className="text-gray-500 mt-1">
@@ -18,7 +21,6 @@ const Lessons = () => {
         </p>
       </div>
 
-      {/* Progress Card */}
       <div className="rounded-2xl p-6 text-white bg-gradient-to-r from-indigo-500 to-cyan-500">
         <p className="text-sm opacity-90">
           Your Progress
@@ -28,7 +30,6 @@ const Lessons = () => {
           {completedLessons} / {totalLessons} Lessons
         </h2>
 
-        {/* Progress Bar */}
         <div className="mt-5 h-2 w-full bg-white/30 rounded-full overflow-hidden">
           <div
             className="h-full bg-white rounded-full transition-all"
@@ -40,6 +41,9 @@ const Lessons = () => {
           Keep going! You’re doing great!
         </p>
       </div>
+
+      <BegLessons />
+
     </div>
   );
 };

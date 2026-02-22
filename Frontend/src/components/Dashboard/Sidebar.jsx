@@ -9,6 +9,7 @@ import {
   TrendingUp,
   User,
   Sparkles,
+  SpellCheck ,
 } from 'lucide-react'
 
 const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
@@ -16,6 +17,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 
   const menuItems = [
     { name: 'Home', href: 'home', icon: Home },
+    { name: 'Alphabets', href: 'alphabets', icon: SpellCheck  },
     { name: 'Lessons', href: 'lessons', icon: BookOpen },
     { name: 'Scenes', href: 'scenes', icon: MessageSquare },
     { name: 'Slang', href: 'slang', icon: Hash },
