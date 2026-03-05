@@ -31,7 +31,7 @@ const PopStructure = () => {
                     whenToUse="Used to motivate oneself or claim that you will be successful soon." example="A: Abhi fail ho gaya, par chinta mat kar. Apna time aayega."
                     gradient="bg-gradient-to-r from-fuchsia-500 to-pink-500"
                     hoverBorder="hover:border-fuchsia-400"
-                    audioSrc="/Audio/KyahaalhaiDemo.mp3"
+                    audioSrc="/src/assets/Audio/PopandCasual/ApnaTimeAayega.mp3"
                 />
 
                 <PhraseDetailCard
@@ -43,6 +43,7 @@ const PopStructure = () => {
                     example="A: Wo ladki kaisi hai? B: Ekdum bindaas hai."
                     gradient="bg-gradient-to-r from-fuchsia-500 to-pink-500"
                     hoverBorder="hover:border-fuchsia-400"
+                    audioSrc="/src/assets/Audio/PopandCasual/Bindass.mp3"
                 />
 
                 <PhraseDetailCard
@@ -55,6 +56,7 @@ const PopStructure = () => {
                     example="A: Hum haar gaye. B: Haar mat maan, picture abhi baaki hai mere dost."
                     gradient="bg-gradient-to-r from-fuchsia-500 to-pink-500"
                     hoverBorder="hover:border-fuchsia-400"
+                    audioSrc="/src/assets/Audio/PopandCasual/PictureAbhiBaakiHai.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Jhakaas"
@@ -66,6 +68,7 @@ const PopStructure = () => {
                     example="A: Meri shirt kaisi lag rahi hai? B: Ekdum jhakaas!"
                     gradient="bg-gradient-to-r from-fuchsia-500 to-pink-500"
                     hoverBorder="hover:border-fuchsia-400"
+                    audioSrc="/src/assets/Audio/PopandCasual/Jhakas.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Tumse na ho payega"
@@ -77,6 +80,7 @@ const PopStructure = () => {
                     example="A: Main gym join karoon? B: Rehne de beta, tumse na ho payega."
                     gradient="bg-gradient-to-r from-fuchsia-500 to-pink-500"
                     hoverBorder="hover:border-fuchsia-400"
+                    audioSrc="/src/assets/Audio/PopandCasual/TumseNaHoPaayega.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Utha le re baba"
@@ -88,6 +92,7 @@ const PopStructure = () => {
                     example="A: (Says something stupid) B: Utha le re baba, utha le."
                     gradient="bg-gradient-to-r from-fuchsia-500 to-pink-500"
                     hoverBorder="hover:border-fuchsia-400"
+                    audioSrc="/src/assets/Audio/PopandCasual/UthaleReBaba.mp3"
                 />
                 <PhraseDetailCard
                     phrase="All Izz Well"
@@ -98,6 +103,7 @@ const PopStructure = () => {
                     example="A: Exam ka result aane wala hai! B: Tension mat le, bol All Izz Well."
                     gradient="bg-gradient-to-r from-fuchsia-500 to-pink-500"
                     hoverBorder="hover:border-fuchsia-400"
+                    audioSrc="/src/assets/Audio/PopandCasual/ALLisWELL.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Main apni favorite hoon"
@@ -108,6 +114,7 @@ const PopStructure = () => {
                     example="A: Tumhe kaun pasand hai? B: Main apni favorite hoon."
                     gradient="bg-gradient-to-r from-fuchsia-500 to-pink-500"
                     hoverBorder="hover:border-fuchsia-400"
+                    audioSrc="/src/assets/Audio/PopandCasual/MeinApnaFavouriteHoon.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Keh diya na, bas keh diya"
@@ -118,6 +125,7 @@ const PopStructure = () => {
                     example="A: Par papa... B: Nahi. Keh diya na, bas keh diya."
                     gradient="bg-gradient-to-r from-fuchsia-500 to-pink-500"
                     hoverBorder="hover:border-fuchsia-400"
+                    audioSrc="/src/assets/Audio/PopandCasual/KehDiyaNa.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Khallas" 
@@ -128,6 +136,7 @@ const PopStructure = () => {
                     example="A: Project complete ho gaya? B: Haan, ekdum khallas."
                     gradient="bg-gradient-to-r from-fuchsia-500 to-pink-500"
                     hoverBorder="hover:border-fuchsia-400"
+                    audioSrc="/src/assets/Audio/PopandCasual/Kalas.mp3"
                 />
             </div>
         </div>

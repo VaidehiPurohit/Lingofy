@@ -15,25 +15,36 @@ function Questions() {
     (answer) => answer.questionId === currentQuestion.id
   );
 
-  // Handle answer click → auto-next
   const handleOptionClick = (optionIndex) => {
     if (currentAnswer) return;
 
     dispatch(answerQuestions({ selectedOption: optionIndex }));
 
-    // Auto move to next question after feedback
+    // ✅ Keep original auto-advance for ALL questions
     setTimeout(() => {
       dispatch(nextQuestion());
-    }, 400);
+    }, 800);
   };
 
   return (
     <div className="max-w-4xl mx-auto">
       <div className="bg-white rounded-2xl shadow-xl p-8 transition-all duration-300 hover:shadow-2xl">
         <div className="mb-8">
+
+          {/* Question Text */}
           <h2 className="text-2xl font-bold text-gray-800 mb-6 leading-relaxed">
             {currentQuestion.question}
           </h2>
+
+          {/* Audio Player (only shows if question has audio) */}
+          {currentQuestion.type === 'audio' && currentQuestion.audio && (
+            <div className="mb-6">
+              <audio controls className="w-full">
+                <source src={currentQuestion.audio} type="audio/mpeg" />
+                Your browser does not support the audio element.
+              </audio>
+            </div>
+          )}
 
           {/* Options */}
           <div className="grid gap-4">
@@ -80,7 +91,7 @@ function Questions() {
           </div>
         </div>
 
-        {/* Explanation (optional) */}
+        {/* Explanation */}
         {showExplanation && currentQuestion.explanation && (
           <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg">
             <div className="flex">
@@ -92,6 +103,18 @@ function Questions() {
                 </p>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* Optional Manual Next Button (does NOT break auto-advance) */}
+        {showExplanation && currentQuestion.type === 'audio' && (
+          <div className="mt-6 text-right">
+            <button
+              onClick={() => dispatch(nextQuestion())}
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            >
+              Next Question
+            </button>
           </div>
         )}
       </div>

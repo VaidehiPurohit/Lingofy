@@ -11,7 +11,7 @@ const PhraseDetailCard = ({
   example,
   gradient,
   hoverBorder,
-  audioSrc, // NEW
+  audioSrc, 
 }) => {
   const audioRef = useRef(null);
 
@@ -60,7 +60,7 @@ const PhraseDetailCard = ({
         </div>
       </div>
 
-      {/* Body */}
+     
       <div className="p-6 flex flex-col gap-6">
         <div>
           <p className="text-sm text-gray-500 mb-1">Meaning</p>
@@ -81,7 +81,7 @@ const PhraseDetailCard = ({
         </div>
       </div>
 
-      {/* Hidden Audio Element */}
+   
       <audio ref={audioRef} src={audioSrc} preload="auto" />
     </div>
   );

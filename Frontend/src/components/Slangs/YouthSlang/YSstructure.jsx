@@ -33,7 +33,7 @@ const YSstructure = () => {
                     example="A: Tu usse kyun lad raha hai? B: Maine panga nahi liya, usne shuru kiya."
                     gradient="bg-gradient-to-r from-orange-500 to-pink-500"
                     hoverBorder="hover:border-orange-400"
-                    audioSrc="/Audio/KyahaalhaiDemo.mp3"
+                    audioSrc="/src/assets/Audio/YS/Panga.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Fattu"
@@ -42,6 +42,7 @@ const YSstructure = () => {
                     whenToUse="Used to tease a friend who is scared to do something adventurous." example="A: Horror movie dekhe? B: Nahi. A: Abe fattu hai kya?"
                     gradient="bg-gradient-to-r from-orange-500 to-pink-500"
                     hoverBorder="hover:border-orange-400"
+                    audioSrc="/src/assets/Audio/YS/Fattu.mp3"
                 />
 
                 <PhraseDetailCard
@@ -50,6 +51,7 @@ const YSstructure = () => {
                     example="A: Iska answer kya hai? B: Oye dhakkan, ye toh sabse easy hai."
                     gradient="bg-gradient-to-r from-orange-500 to-pink-500"
                     hoverBorder="hover:border-orange-400"
+                    audioSrc="/src/assets/Audio/YS/Dhakkan.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Machaya"
@@ -59,6 +61,7 @@ const YSstructure = () => {
                     whenToUse="Used to compliment someone for doing an amazing job (Gaming/Sports)." example="A: Maine top kiya exam mein. B: Wah bhai, tune toh machaya!"
                     gradient="bg-gradient-to-r from-orange-500 to-pink-500"
                     hoverBorder="hover:border-orange-400"
+                    audioSrc="/src/assets/Audio/YS/Machaya.mp3"
                 />
                 <PhraseDetailCard
                    phrase="Bhau khaana" 
@@ -69,6 +72,7 @@ const YSstructure = () => {
                    example="A: Wo reply nahi kar rahi. B: Chod na, wo bas bhau kha rahi hai."
                     gradient="bg-gradient-to-r from-orange-500 to-pink-500"
                     hoverBorder="hover:border-orange-400"
+                    audioSrc="/src/assets/Audio/YS/BhauKhaana.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Fek mat" 
@@ -76,6 +80,7 @@ const YSstructure = () => {
                     whenToUse="Used when someone is exaggerating a story." example="A: Mere paas 5 girlfriends hain. B: Chal be, fek mat."
                     gradient="bg-gradient-to-r from-orange-500 to-pink-500"
                     hoverBorder="hover:border-orange-400"
+                    audioSrc="/src/assets/Audio/YS/FekMat.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Kaand" 
@@ -87,6 +92,7 @@ const YSstructure = () => {
                     example="A: Jaldi aa, hostel mein bada kaand ho gaya hai."
                     gradient="bg-gradient-to-r from-orange-500 to-pink-500"
                     hoverBorder="hover:border-orange-400"
+                    audioSrc="/src/assets/Audio/YS/Kaand.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Chindi" 
@@ -98,7 +104,9 @@ const YSstructure = () => {
                     example="A: Wo treat dega? B: Bhool ja, wo bohot chindi hai."
                     gradient="bg-gradient-to-r from-orange-500 to-pink-500"
                     hoverBorder="hover:border-orange-400"
+                    audioSrc="/src/assets/Audio/YS/Chindi.mp3"
                 />
+
                 <PhraseDetailCard
                     phrase="BT" 
                     Hindi="बी.टी" 
@@ -108,6 +116,7 @@ const YSstructure = () => {
                     example="A: Teacher ne assignment reject kar diya. B: Yaar, bohot BT hai ye."
                     gradient="bg-gradient-to-r from-orange-500 to-pink-500"
                     hoverBorder="hover:border-orange-400"
+                    audioSrc="/src/assets/Audio/YS/BT.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Dedh shaana" 
@@ -119,6 +128,7 @@ const YSstructure = () => {
                     example="A: Tu mujhe mat sikha, dedh shaana mat ban."
                     gradient="bg-gradient-to-r from-orange-500 to-pink-500"
                     hoverBorder="hover:border-orange-400"
+                    audioSrc="/src/assets/Audio/YS/BhauKhaana.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Gyaan" 
@@ -129,6 +139,7 @@ const YSstructure = () => {
                     example="A: Tujhe subah jaldi uthna chahiye... B: Please yaar, gyaan mat de abhi."
                     gradient="bg-gradient-to-r from-orange-500 to-pink-500"
                     hoverBorder="hover:border-orange-400"
+                    audioSrc="/src/assets/Audio/YS/Gyaan.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Khali-pili" 
@@ -139,6 +150,7 @@ const YSstructure = () => {
                     example="A: Main bohot tension mein hoon. B: Khali-pili tension mat le, sab theek hoga."
                     gradient="bg-gradient-to-r from-orange-500 to-pink-500"
                     hoverBorder="hover:border-orange-400"
+                    audioSrc="/src/assets/Audio/YS/KhaliPili.mp3"
                 />
             </div>
         </div>

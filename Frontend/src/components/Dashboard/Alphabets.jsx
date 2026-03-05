@@ -19,19 +19,19 @@ const Alphabets = () => {
                 </p>
             </div>
 
-            <hr className="border-gray-200" />
+              <hr className="border-gray-200" />
 
-            <div>
+              <div>
                 <h1 className="text-xl font-semibold text-gray-800 mb-4"> Swar </h1>
                 <Swar />
-            </div>
+              </div>
 
-            <hr className="border-gray-200" />
+              <hr className="border-gray-200" />
 
-            <div>
+              <div>
                 <h1 className="text-xl font-semibold text-gray-800 mb-4"> Vyanjan </h1>
                 <Vyanjan />
-            </div>
+              </div>
 
         </div>
 

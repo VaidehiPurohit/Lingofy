@@ -29,6 +29,7 @@ const ReactStructure = () => {
                     example="A: Maine nayi car li. B: Arre waah! Mubarak ho."
                     gradient="bg-gradient-to-r from-rose-400 to-pink-500"
                     hoverBorder="hover:border-rose-400"
+                    audioSrc="/src/assets/Audio/RS/AreWah.mp3"
                 />
 
                 <PhraseDetailCard
@@ -41,6 +42,7 @@ const ReactStructure = () => {
                     example="A: Light chali gayi. B: Arey yaar! Ab kya karein?"
                     gradient="bg-gradient-to-r from-rose-400 to-pink-500"
                     hoverBorder="hover:border-rose-400"
+                    audioSrc="/src/assets/Audio/RS/AreyYaar.mp3"
                 />
 
                 <PhraseDetailCard
@@ -51,6 +53,7 @@ const ReactStructure = () => {
                     meaning="Oh my God! / Goodness gracious!" whenToUse="Used when you are shocked, scared, or overwhelmed by the size/price of something." example="A: Ye phone 2 lakh ka hai. B: Baap re! Itna mehenga?"
                    gradient="bg-gradient-to-r from-rose-400 to-pink-500"
                     hoverBorder="hover:border-rose-400"
+                    audioSrc="/src/assets/Audio/RS/BaapRe.mp3"
                 />
 
                 <PhraseDetailCard
@@ -62,6 +65,7 @@ const ReactStructure = () => {
                     example="A: Aaj Sunday nahi hai, Monday hai. B: O teri! Main toh bhool hi gaya."
                     gradient="bg-gradient-to-r from-rose-400 to-pink-500"
                     hoverBorder="hover:border-rose-400"
+                    audioSrc="/src/assets/Audio/RS/Oteri.mp3"
                 />
 
                 <PhraseDetailCard
@@ -74,6 +78,7 @@ const ReactStructure = () => {
                     example="A: Wo phir late aaya. B: Hadd hai yaar, wo sudhrega nahi."
                     gradient="bg-gradient-to-r from-rose-400 to-pink-500"
                     hoverBorder="hover:border-rose-400"
+                    audioSrc="/src/assets/Audio/RS/Haddhai.mp3"
                 />
 
                 <PhraseDetailCard
@@ -86,6 +91,8 @@ const ReactStructure = () => {
                     example="A: Doodh ubal kar gir gaya. B: Satya naash! Ab saaf karna padega."
                     gradient="bg-gradient-to-r from-rose-400 to-pink-500"
                     hoverBorder="hover:border-rose-400"
+                    audioSrc="/src/assets/Audio/RS/SatyaNaash.mp3"
+
                 />
 
                 <PhraseDetailCard
@@ -98,6 +105,7 @@ const ReactStructure = () => {
                     example="A: Movie achi thi? B: Kasam se, bohot maza aaya."
                     gradient="bg-gradient-to-r from-rose-400 to-pink-500"
                     hoverBorder="hover:border-rose-400"
+                    audioSrc="/src/assets/Audio/RS/KasamSe.mp3"
                 />
 
                 <PhraseDetailCard
@@ -109,6 +117,7 @@ const ReactStructure = () => {
                     example="A: Wo bol raha tha dharti flat hai. B: Kya bakwaas hai!"
                     gradient="bg-gradient-to-r from-rose-400 to-pink-500"
                     hoverBorder="hover:border-rose-400"
+                    audioSrc="/src/assets/Audio/RS/KyaBakwassHai.mp3"
                 />
 
                 <PhraseDetailCard
@@ -119,6 +128,7 @@ const ReactStructure = () => {
                     meaning="Oh my / Oof (Exhaustion or Admiration)" whenToUse="Can express tiredness ('Uff, itni garmi') or admiring beauty ('Uff, kya lag rahi hai')." example="A: Uff! Kitni garmi hai aaj."
                     gradient="bg-gradient-to-r from-rose-400 to-pink-500"
                     hoverBorder="hover:border-rose-400"
+                    audioSrc="/src/assets/Audio/RS/Uff.mp3"
                 />
 
                 <PhraseDetailCard
@@ -131,6 +141,7 @@ const ReactStructure = () => {
                     example="A: Maine apna phone paani mein gira diya. B: Waah bhai waah!"
                     gradient="bg-gradient-to-r from-rose-400 to-pink-500"
                     hoverBorder="hover:border-rose-400"
+                    audioSrc="/src/assets/Audio/RS/WaahBhaiWaah.mp3"
                 />
 
             </div>

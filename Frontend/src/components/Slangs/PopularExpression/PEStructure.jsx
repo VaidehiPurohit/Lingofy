@@ -31,8 +31,9 @@ const PEstructure = () => {
                     example="A: Kal main Goa ja raha hoon. B: Sahi hai bhai!"
                     gradient="bg-gradient-to-r from-purple-500 to-pink-500"
                     hoverBorder="hover:border-purple-400"
-                    audioSrc="/Audio/KyahaalhaiDemo.mp3"
+                    audioSrc="/src/assets/Audio/PE/SahiHai.mp3"
                 />
+
                 <PhraseDetailCard
                     phrase="Waat lag gayi"
                     Hindi="वाट लग गई"
@@ -42,6 +43,7 @@ const PEstructure = () => {
                     example="A: Boss ne dekh liya? B: Haan, waat lag gayi aaj."
                     gradient="bg-gradient-to-r from-purple-500 to-pink-500"
                     hoverBorder="hover:border-purple-400"
+                    audioSrc="/src/assets/Audio/PE/Watlaggayi.mp3"
                 />
 
                 <PhraseDetailCard
@@ -54,6 +56,7 @@ const PEstructure = () => {
                     example="A: Ticket nahi mili. B: Chinta mat kar, kuch jugaad karte hain."
                     gradient="bg-gradient-to-r from-purple-500 to-pink-500"
                     hoverBorder="hover:border-purple-400"
+                    audioSrc="/src/assets/Audio/PE/Jugaad.mp3"
                 />
                 <PhraseDetailCard
                    phrase="Pakau" 
@@ -64,6 +67,7 @@ const PEstructure = () => {
                    example="A: Wo lecture kaisa tha? B: Bohot pakau tha yaar."
                     gradient="bg-gradient-to-r from-purple-500 to-pink-500"
                     hoverBorder="hover:border-purple-400"
+                    audioSrc="/src/assets/Audio/PE/Pakau.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Kalti maar" 
@@ -75,6 +79,7 @@ const PEstructure = () => {
                     example="A: Police aa rahi hai! B: Jaldi kalti maar!"
                     gradient="bg-gradient-to-r from-purple-500 to-pink-500"
                     hoverBorder="hover:border-purple-400"
+                    audioSrc="/src/assets/Audio/PE/KaltiMaar.mp3"
                 />
                 <PhraseDetailCard
                    phrase="Vella" 
@@ -82,6 +87,7 @@ const PEstructure = () => {
                    example="A: Tu free hai? B: Haan, main toh vella hoon."
                     gradient="bg-gradient-to-r from-purple-500 to-pink-500"
                     hoverBorder="hover:border-purple-400"
+                    audioSrc="/src/assets/Audio/PE/Vella.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Dhaasu"
@@ -89,6 +95,7 @@ const PEstructure = () => {
                     example="A: Movie kaisi thi? B: Ekdum dhaasu thi!"
                     gradient="bg-gradient-to-r from-purple-500 to-pink-500"
                     hoverBorder="hover:border-purple-400"
+                    audioSrc="/src/assets/Audio/PE/Dhaasu.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Jhol" 
@@ -97,6 +104,7 @@ const PEstructure = () => {
                     example="A: Hisaab barabar hai? B: Nahi, kuch jhol lag raha hai."
                     gradient="bg-gradient-to-r from-purple-500 to-pink-500"
                     hoverBorder="hover:border-purple-400"
+                    audioSrc="/src/assets/Audio/PE/Jhol.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Bas kar" 
@@ -106,6 +114,7 @@ const PEstructure = () => {
                     whenToUse="Used to tell someone to stop talking or doing something." example="A: (Keeps joking) B: Bas kar bhai, ab pak mat."
                     gradient="bg-gradient-to-r from-purple-500 to-pink-500"
                     hoverBorder="hover:border-purple-400"
+                    audioSrc="/src/assets/Audio/PE/BasKar.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Oye" 
@@ -115,6 +124,7 @@ const PEstructure = () => {
                     example="A: Oye! Idhar aa sun. B: Kya hua?"
                     gradient="bg-gradient-to-r from-purple-500 to-pink-500"
                     hoverBorder="hover:border-purple-400"
+                    audioSrc="/src/assets/Audio/PE/Oye.mp3"
                 />
 
 

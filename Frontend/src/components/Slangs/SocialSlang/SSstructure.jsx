@@ -22,45 +22,61 @@ const SSstructure = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
                 <PhraseDetailCard
                     phrase="Chalega"
-                    Hindi="चलेगा" literal="It will walk" level="Casual" meaning="It works / That's fine" whenToUse="Used to agree to a plan or accept an option." example="A: Pizza order karein? B: Haan, chalega."
+                    Hindi="चलेगा" 
+                    literal="It will walk" 
+                    level="Casual" 
+                    meaning="It works / That's fine" 
+                    whenToUse="Used to agree to a plan or accept an option." example="A: Pizza order karein? B: Haan, chalega."
                     gradient="bg-gradient-to-r from-sky-500 to-cyan-500"
                     hoverBorder="hover:border-cyan-400"
+                    audioSrc="/src/assets/Audio/SS/Chalega.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Pakka?"
                     Hindi="पक्का?"
-                    literal="Cooked / Solid" level="Common"
+                    literal="Cooked / Solid" 
+                    level="Common"
                     meaning="Are you sure? / Promise?"
                     whenToUse="Used to confirm a plan or verify if someone is telling the truth."
                     example="A: Main kal aaoonga. B: Pakka?"
                     gradient="bg-gradient-to-r from-sky-500 to-cyan-500"
                     hoverBorder="hover:border-cyan-400"
+                    audioSrc="/src/assets/Audio/SS/Pakka.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Bilkul"
-                    Hindi="बिलकुल" literal="Absolutely" level="Common" meaning="Totally / Exactly / For sure"
+                    Hindi="बिलकुल" 
+                    literal="Absolutely" 
+                    level="Common" 
+                    meaning="Totally / Exactly / For sure"
                     whenToUse="Strong agreement with someone."
                     example="A: Ye galat hai na? B: Bilkul!"
                     gradient="bg-gradient-to-r from-sky-500 to-cyan-500"
                     hoverBorder="hover:border-cyan-400"
+                    audioSrc="/src/assets/Audio/SS/Bilkul.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Koi na"
                     Hindi="कोई ना"
-                    literal="No one / None" level="Casual (Short for 'Koi baat nahi')"
-                    meaning="No problem / It's okay / Never mind" whenToUse="Used to forgive someone or dismiss a small issue."
+                    literal="No one / None" 
+                    level="Casual (Short for 'Koi baat nahi')"
+                    meaning="No problem / It's okay / Never mind" 
+                    whenToUse="Used to forgive someone or dismiss a small issue."
                     example="A: Sorry late ho gaya. B: Arre koi na."
                     gradient="bg-gradient-to-r from-sky-500 to-cyan-500"
                     hoverBorder="hover:border-cyan-400"
+                    audioSrc="/src/assets/Audio/SS/Koina.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Rehne de"
                     Hindi="रहने दे"
-                    literal="Let it remain" level="Casual"
+                    literal="Let it remain" 
+                    level="Casual"
                     meaning="Forget it / Let it be / Don't bother"
                     whenToUse="Used when you give up on explaining something or tell someone not to do a task." example="A: Main help karoon? B: Nahi, tu rehne de."
                     gradient="bg-gradient-to-r from-sky-500 to-cyan-500"
                     hoverBorder="hover:border-cyan-400"
+                    audioSrc="/src/assets/Audio/SS/Rehnede.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Chalo"
@@ -71,6 +87,7 @@ const SSstructure = () => {
                     example="A: Bye! B: Chalo, milte hain."
                     gradient="bg-gradient-to-r from-sky-500 to-cyan-500"
                     hoverBorder="hover:border-cyan-400"
+                    audioSrc="/src/assets/Audio/SS/Chalo.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Ho jayega"
@@ -80,6 +97,7 @@ const SSstructure = () => {
                     example="A: Ye kaam kal tak chahiye. B: Tension mat lo, ho jayega."
                     gradient="bg-gradient-to-r from-sky-500 to-cyan-500"
                     hoverBorder="hover:border-cyan-400"
+                    audioSrc="/src/assets/Audio/SS/Hojaayega.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Kya baat hai"
@@ -89,6 +107,7 @@ const SSstructure = () => {
                     whenToUse="Used to express appreciation or admiration." example="A: Maine nayi job join ki. B: Kya baat hai! Mubarak ho."
                     gradient="bg-gradient-to-r from-sky-500 to-cyan-500"
                     hoverBorder="hover:border-cyan-400"
+                    audioSrc="/src/assets/Audio/SS/Kyabaathai.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Bas?"
@@ -99,6 +118,7 @@ const SSstructure = () => {
                     example="A: Aur kuch chahiye? B: Nahi, bas."
                     gradient="bg-gradient-to-r from-sky-500 to-cyan-500"
                     hoverBorder="hover:border-cyan-400"
+                    audioSrc="/src/assets/Audio/SS/Bas.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Sach mein?"
@@ -107,6 +127,7 @@ const SSstructure = () => {
                     whenToUse="Used to express skepticism or surprise." example="A: Wo fail ho gaya. B: Sach mein?"
                     gradient="bg-gradient-to-r from-sky-500 to-cyan-500"
                     hoverBorder="hover:border-cyan-400"
+                    audioSrc="/src/assets/Audio/SS/Sachmein.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Dekhte hain"
@@ -117,6 +138,7 @@ const SSstructure = () => {
                     example="A: Trip pe chalein? B: Pata nahi, dekhte hain."
                     gradient="bg-gradient-to-r from-sky-500 to-cyan-500"
                     hoverBorder="hover:border-cyan-400"
+                    audioSrc="/src/assets/Audio/SS/Dekhtehai.mp3"
                 />
                 <PhraseDetailCard
                     phrase="Samjha"
@@ -126,6 +148,7 @@ const SSstructure = () => {
                     example="A: Isko aise karna hai, samjha? B: Haan, samjha."
                     gradient="bg-gradient-to-r from-sky-500 to-cyan-500"
                     hoverBorder="hover:border-cyan-400"
+                    audioSrc="/src/assets/Audio/SS/Samjha.mp3"
                 />
             </div>
         </div>
