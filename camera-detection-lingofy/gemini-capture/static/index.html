@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>WordCam</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Space+Mono:wght@400;700&display=swap');
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    :root {
+      --bg: #f4f0e8;
+      --paper: #fdfaf5;
+      --ink: #1a1a2e;
+      --accent: #e8503a;
+      --green: #3aad6e;
+      --blue: #3a7fe8;
+      --muted: #9a9080;
+      --border: #e2d9cc;
+      --shadow: rgba(26, 26, 46, .1);
+      --mono: 'Space Mono', monospace;
+      --sans: 'DM Sans', sans-serif;
+    }
+
+    html,
+    body {
+      height: 100%;
+      background: var(--bg);
+      font-family: var(--sans);
+      color: var(--ink);
+      overflow: hidden
+    }
+
+    .app {
+      height: 100vh;
+      max-width: 480px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      background: var(--paper);
+      box-shadow: 0 0 60px var(--shadow)
+    }
+
+    /* ── Header ── */
+    .hdr {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 18px;
+      border-bottom: 1px solid var(--border)
+    }
+
+    .logo {
+      font-family: var(--mono);
+      font-size: 17px;
+      font-weight: 700
+    }
+
+    .logo em {
+      color: var(--accent);
+      font-style: normal
+    }
+
+    .hdr-right {
+      display: flex;
+      align-items: center;
+      gap: 7px
+    }
+
+    .s-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--muted);
+      transition: background .3s
+    }
+
+    .s-dot.ready {
+      background: var(--green)
+    }
+
+    .s-dot.busy {
+      background: var(--accent);
+      animation: dp .7s infinite
+    }
+
+    .s-txt {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      transition: color .3s
+    }
+
+    .s-txt.ready {
+      color: var(--green)
+    }
+
+    .s-txt.busy {
+      color: var(--accent)
+    }
+
+    /* ── Viewport ── */
+    .vp {
+      position: relative;
+      flex: 1;
+      background: #0a0a10;
+      overflow: hidden
+    }
+
+    #video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block
+    }
+
+    #snap {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none
+    }
+
+    /* viewfinder */
+    .vf,
+    .vf2 {
+      position: absolute;
+      inset: 0;
+      pointer-events: none
+    }
+
+    .vf::before,
+    .vf::after,
+    .vf2::before,
+    .vf2::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-style: solid;
+      border-color: rgba(255, 255, 255, .4)
+    }
+
+    .vf::before {
+      top: 12px;
+      left: 12px;
+      border-width: 2px 0 0 2px
+    }
+
+    .vf::after {
+      top: 12px;
+      right: 12px;
+      border-width: 2px 2px 0 0
+    }
+
+    .vf2::before {
+      bottom: 12px;
+      left: 12px;
+      border-width: 0 0 2px 2px
+    }
+
+    .vf2::after {
+      bottom: 12px;
+      right: 12px;
+      border-width: 0 2px 2px 0
+    }
+
+    /* flash */
+    .flash {
+      position: absolute;
+      inset: 0;
+      background: #fff;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .05s;
+      z-index: 10;
+    }
+
+    /* Mirroring Class */
+    .vp.mirrored video,
+    .vp.mirrored #snap,
+    .vp.mirrored #labelsLayer {
+      transform: scaleX(-1);
+    }
+
+    .flash.pop {
+      opacity: .7
+    }
+
+    /* hint */
+    .hint {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(10, 10, 20, .6);
+      color: #fff;
+      font-size: 13px;
+      padding: 7px 16px;
+      border-radius: 20px;
+      backdrop-filter: blur(8px);
+      pointer-events: none;
+      transition: opacity .4s;
+      white-space: nowrap;
+    }
+
+    .hint.gone {
+      opacity: 0
+    }
+
+    /* labels */
+    #labelsLayer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none
+    }
+
+    .bbox {
+      position: absolute;
+      border: 2px solid;
+      border-radius: 3px;
+      pointer-events: all;
+      cursor: pointer;
+      transition: transform .15s;
+    }
+
+    .bbox::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: currentColor;
+      opacity: .07;
+      border-radius: 1px
+    }
+
+    .bbox:hover {
+      transform: scale(1.015)
+    }
+
+    .bbox:active {
+      transform: scale(.985)
+    }
+
+    .lbl {
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px 3px 5px;
+      border-radius: 2px 2px 2px 0;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+      animation: lblIn .3s cubic-bezier(.34, 1.56, .64, 1) both;
+      transform-origin: left top;
+    }
+
+    @keyframes lblIn {
+      from {
+        opacity: 0;
+        transform: scale(.3)
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1)
+      }
+    }
+
+    .lbl-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .65);
+      animation: dp 1.4s infinite
+    }
+
+    @keyframes dp {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: .25
+      }
+    }
+
+    /* processing */
+    .proc {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(10, 10, 20, .45);
+      backdrop-filter: blur(5px);
+      z-index: 20;
+    }
+
+    .proc.on {
+      display: flex
+    }
+
+    .proc-card {
+      background: var(--paper);
+      border-radius: 16px;
+      padding: 22px 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 8px 32px var(--shadow);
+      min-width: 200px;
+    }
+
+    .proc-ring {
+      width: 34px;
+      height: 34px;
+      border: 2.5px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin .7s linear infinite
+    }
+
+    .proc-lbl {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--muted)
+    }
+
+    .proc-sub {
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.5
+    }
+
+    /* toast */
+    .toast {
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 11px;
+      color: #856404;
+      white-space: nowrap;
+      z-index: 50;
+      opacity: 0;
+      transition: opacity .3s;
+      pointer-events: none;
+      max-width: 90%;
+      white-space: normal;
+      text-align: center;
+    }
+
+    .toast.show {
+      opacity: 1
+    }
+
+    .toast.err {
+      background: #fde8e8;
+      border-color: var(--accent);
+      color: #8b1a1a
+    }
+
+    /* bottom bar */
+    .bar {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 18px;
+      border-top: 1px solid var(--border);
+      background: var(--paper);
+    }
+
+    .btn {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border-radius: 10px;
+      border: 2px solid;
+      cursor: pointer;
+      transition: all .2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+    }
+
+    .btn:disabled {
+      opacity: .35;
+      cursor: not-allowed
+    }
+
+    .btn-snap {
+      flex: 1;
+      padding: 13px;
+      border-color: var(--ink);
+      background: var(--ink);
+      color: var(--paper)
+    }
+
+    .btn-snap:hover:not(:disabled) {
+      background: var(--accent);
+      border-color: var(--accent)
+    }
+
+    .btn-snap .icon {
+      font-size: 16px
+    }
+
+    .btn-retake {
+      padding: 13px 16px;
+      border-color: var(--border);
+      background: transparent;
+      color: var(--muted);
+      display: none
+    }
+
+    .btn-retake:hover {
+      border-color: var(--ink);
+      color: var(--ink)
+    }
+
+    .bar-info {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted);
+      min-width: 52px;
+      text-align: right
+    }
+
+    .bar-info b {
+      color: var(--ink)
+    }
+
+    /* drawer */
+    .drawer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--paper);
+      border-top: 1px solid var(--border);
+      border-radius: 18px 18px 0 0;
+      padding: 16px 20px 32px;
+      z-index: 30;
+      box-shadow: 0 -10px 30px var(--shadow);
+      transform: translateY(102%);
+      transition: transform .3s cubic-bezier(.34, 1.1, .64, 1);
+    }
+
+    .drawer.open {
+      transform: translateY(0)
+    }
+
+    .drawer-pull {
+      width: 34px;
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      margin: 0 auto 14px
+    }
+
+    .drawer-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 14px
+    }
+
+    .d-name {
+      font-family: var(--mono);
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.15;
+      text-transform: capitalize
+    }
+
+    .d-meta {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 3px
+    }
+
+    .d-x {
+      background: var(--border);
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      font-size: 13px;
+      cursor: pointer;
+      color: var(--muted);
+      transition: all .2s;
+      flex-shrink: 0;
+      margin-top: 2px
+    }
+
+    .d-x:hover {
+      background: var(--ink);
+      color: #fff
+    }
+
+    /* grammar card */
+    .g-card {
+      background: var(--bg);
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 13px
+    }
+
+
+    .g-tag {
+      font-family: var(--mono);
+      font-size: 8px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      margin-bottom: 3px
+    }
+
+    .g-val {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--ink)
+    }
+
+    .g-val em {
+      font-style: italic;
+      color: var(--accent);
+      font-weight: 500
+    }
+
+    .g-val b {
+      font-weight: 600
+    }
+
+    .g-q {
+      margin-top: 4px;
+      background: rgba(58, 127, 232, .08);
+      border-left: 3px solid var(--blue);
+      border-radius: 0 6px 6px 0;
+      padding: 8px 12px;
+      font-size: 13px;
+      color: var(--blue);
+      font-style: italic;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+
+    <div class="hdr">
+      <div class="logo">Word<em>Cam</em></div>
+      <div class="hdr-right">
+        <div class="s-dot" id="sDot"></div>
+        <div class="s-txt" id="sTxt">INIT</div>
+      </div>
+    </div>
+
+    <div class="vp" id="vp">
+      <video id="video" autoplay playsinline muted></video>
+      <img id="snap" alt="" />
+      <div class="vf"></div>
+      <div class="vf2"></div>
+      <div class="flash" id="flash"></div>
+      <div class="hint" id="hint">Point camera → tap SNAP</div>
+      <div id="labelsLayer"></div>
+
+      <div class="proc" id="proc">
+        <div class="proc-card">
+          <div class="proc-ring"></div>
+          <div class="proc-lbl">GEMINI VISION</div>
+          <div class="proc-sub" id="procSub">Identifying objects…</div>
+        </div>
+      </div>
+
+      <div class="toast" id="toast"></div>
+
+      <div class="drawer" id="drawer">
+        <div class="drawer-pull"></div>
+        <div class="drawer-top">
+          <div>
+            <div class="d-name" id="dName">object</div>
+            <div class="d-meta" id="dMeta"></div>
+          </div>
+          <button class="d-x" id="dClose">✕</button>
+        </div>
+        <div class="g-card" id="dGrammar"></div>
+      </div>
+    </div>
+
+    <div class="bar">
+      <button class="btn btn-switch" id="btnFlip" title="Flip View">↔️ FLIP</button>
+      <button class="btn btn-snap" id="btnSnap" disabled>
+        <span class="icon">📷</span> SNAP
+      </button>
+      <button class="btn btn-retake" id="btnRetake">↺ Retake</button>
+      <div class="bar-info" id="barInfo"></div>
+    </div>
+
+  </div>
+  <script>
+    // ── Grammar engine ──────────────────────────────────────────────────────────
+    const IRREG = {
+      person: 'people', child: 'children', man: 'men', woman: 'women',
+      mouse: 'mice', tooth: 'teeth', foot: 'feet', goose: 'geese', sheep: 'sheep',
+      deer: 'deer', fish: 'fish', ox: 'oxen', leaf: 'leaves', knife: 'knives',
+      life: 'lives', wife: 'wives', half: 'halves', shelf: 'shelves', wolf: 'wolves',
+      loaf: 'loaves', scarf: 'scarves'
+    };
+    const VOW = new Set(['a', 'e', 'i', 'o', 'u']);
+
+    function art(w) { return VOW.has(w[0].toLowerCase()) ? 'an' : 'a'; }
+    function plur(w) {
+      // handle multi-word: pluralize last word
+      const parts = w.split(' ');
+      const last = parts[parts.length - 1].toLowerCase();
+      let p;
+      if (IRREG[last]) p = IRREG[last];
+      else if (/[sxz]$|[cs]h$/i.test(last)) p = last + 'es';
+      else if (/[^aeiou]y$/i.test(last)) p = last.slice(0, -1) + 'ies';
+      else if (/fe?$/i.test(last)) p = last.replace(/fe?$/i, 'ves');
+      else p = last + 's';
+      return [...parts.slice(0, -1), p].join(' ');
+    }
+
+    function buildGrammar(name) {
+      const a = art(name), pl = plur(name);
+      const cap = name.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+      return `
+    <div class="g-row">
+      <div class="g-tag">ARTICLE  (A / AN / THE)</div>
+      <div class="g-val">
+        I can see <em>${a} ${name}</em> here.<br>
+        <em>The ${name}</em> is right over there.
+      </div>
+    </div>
+    <div class="g-row">
+      <div class="g-tag">PLURAL FORM</div>
+      <div class="g-val">
+        One <b>${name}</b> → many <em>${pl}</em>.<br>
+        There are several ${pl} in this room.
+      </div>
+    </div>
+    <div class="g-row">
+      <div class="g-tag">EXAMPLE SENTENCES</div>
+      <div class="g-val">
+        ${cap} ${pl} are useful everyday objects.<br>
+        Can you hand me <em>${a} ${name}</em>?
+      </div>
+    </div>
+    <div class="g-q">❓ Can you make a sentence using "<b>${name}</b>"?</div>
+  `;
+    }
+
+    // ── Palette ──────────────────────────────────────────────────────────────────
+    const PAL = ['#e8503a', '#3a7fe8', '#9b59b6', '#e8963a', '#3aad6e',
+      '#e83a7f', '#16a085', '#c0392b', '#2471a3', '#7d6608'];
+    const cmap = {}; let ci = 0;
+    const col = n => { if (!cmap[n]) cmap[n] = PAL[ci++ % PAL.length]; return cmap[n]; };
+
+    // ── DOM ──────────────────────────────────────────────────────────────────────
+    const video = document.getElementById('video');
+    const snapImg = document.getElementById('snap');
+    const labelsEl = document.getElementById('labelsLayer');
+    const btnSnap = document.getElementById('btnSnap');
+    const btnRetake = document.getElementById('btnRetake');
+    const sDot = document.getElementById('sDot');
+    const sTxt = document.getElementById('sTxt');
+    const barInfo = document.getElementById('barInfo');
+    const proc = document.getElementById('proc');
+    const procSub = document.getElementById('procSub');
+    const flash = document.getElementById('flash');
+    const hint = document.getElementById('hint');
+    const drawer = document.getElementById('drawer');
+    const dName = document.getElementById('dName');
+    const dMeta = document.getElementById('dMeta');
+    const dGrammar = document.getElementById('dGrammar');
+    const dClose = document.getElementById('dClose');
+    const toast = document.getElementById('toast');
+    const vp = document.getElementById('vp');
+
+    let hasSnap = false, vpW = 0, vpH = 0;
+    let toastTimer = null;
+    let currentStream = null;
+    let facingMode = 'user'; // 'user' for laptop/selfie, 'environment' for rear
+    let mirrored = false;
+
+    function setStatus(lbl, state) {
+      sTxt.textContent = lbl; sTxt.className = 's-txt ' + state;
+      sDot.className = 's-dot ' + state;
+    }
+    function showToast(msg, isErr = false, dur = 4500) {
+      toast.textContent = msg;
+      toast.className = 'toast show' + (isErr ? ' err' : '');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), dur);
+    }
+
+    // ── Camera ───────────────────────────────────────────────────────────────────
+    async function initCamera() {
+      if (currentStream) {
+        currentStream.getTracks().forEach(track => track.stop());
+      }
+
+      try {
+        const s = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: facingMode,
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+          }
+        });
+        currentStream = s;
+        video.srcObject = s;
+        await new Promise(r => video.onloadedmetadata = r);
+        await video.play();
+
+        await video.play();
+
+        setStatus('READY', 'ready');
+        btnSnap.disabled = false;
+
+        // Health check (on first load)
+        if (!window.healthChecked) {
+          try {
+            const h = await fetch('http://localhost:5000/health', { signal: AbortSignal.timeout(2000) });
+            const hd = await h.json();
+            if (!hd.api_key_set) showToast('⚠ API key not set in app.py', true, 8000);
+            window.healthChecked = true;
+          } catch (e) { }
+        }
+
+      } catch (e) {
+        console.error(e);
+        setStatus('ERROR', 'busy');
+        showToast('Camera access denied or not found.', true, 8000);
+      }
+    }
+
+    initCamera();
+
+    document.getElementById('btnFlip').addEventListener('click', () => {
+      mirrored = !mirrored;
+      if (mirrored) vp.classList.add('mirrored');
+      else vp.classList.remove('mirrored');
+    });
+
+    // ── Snap ─────────────────────────────────────────────────────────────────────
+    btnSnap.addEventListener('click', doSnap);
+
+    async function doSnap() {
+      if (hasSnap) return;
+      hasSnap = true;
+      hint.classList.add('gone');
+
+      flash.classList.add('pop');
+      setTimeout(() => flash.classList.remove('pop'), 150);
+
+      const tmp = document.createElement('canvas');
+      tmp.width = video.videoWidth || 640;
+      tmp.height = video.videoHeight || 480;
+      tmp.getContext('2d').drawImage(video, 0, 0);
+      const dataUrl = tmp.toDataURL('image/jpeg', 0.92);
+
+      snapImg.src = dataUrl; snapImg.style.display = 'block';
+      video.style.opacity = '0';
+      btnSnap.style.display = 'none';
+      btnRetake.style.display = 'flex';
+      labelsEl.innerHTML = ''; barInfo.innerHTML = '';
+      closeDrawer();
+
+      const rect = vp.getBoundingClientRect();
+      vpW = rect.width; vpH = rect.height;
+
+      setStatus('BUSY', 'busy');
+      proc.classList.add('on');
+      procSub.textContent = 'Sending to Gemini 2.5 Flash...';
+
+      try {
+        const res = await fetch('http://localhost:5000/detect', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ image: dataUrl })
+        });
+        const data = await res.json();
+        if (!res.ok || data.error) throw new Error(data.error || 'Server error');
+        renderLabels(data.objects);
+        barInfo.innerHTML = data.count ? `<b>${data.count}</b> found` : '0 found';
+      } catch (e) {
+        showToast('⚠ ' + e.message, true, 6000);
+        barInfo.innerHTML = 'error';
+      }
+
+      proc.classList.remove('on');
+      setStatus('READY', 'ready');
+    }
+
+    // ── Retake ────────────────────────────────────────────────────────────────────
+    btnRetake.addEventListener('click', () => {
+      hasSnap = false;
+      snapImg.style.display = 'none'; snapImg.src = '';
+      video.style.opacity = '1';
+      btnSnap.style.display = 'flex'; btnRetake.style.display = 'none';
+      labelsEl.innerHTML = ''; barInfo.innerHTML = '';
+      hint.classList.remove('gone');
+      closeDrawer();
+    });
+
+    // ── Render labels ─────────────────────────────────────────────────────────────
+    function renderLabels(objects) {
+      labelsEl.innerHTML = '';
+      if (!objects || !objects.length) return;
+
+      objects.forEach((obj, i) => {
+        const c = col(obj.name);
+        const { x1, y1, x2, y2 } = obj.box;
+        const left = (x1 / 100) * vpW, top = (y1 / 100) * vpH;
+        const width = ((x2 - x1) / 100) * vpW, height = ((y2 - y1) / 100) * vpH;
+
+        const box = document.createElement('div');
+        box.className = 'bbox';
+        box.style.cssText = `left:${left}px;top:${top}px;width:${width}px;height:${height}px;border-color:${c};color:${c}`;
+
+        const lbl = document.createElement('div');
+        lbl.className = 'lbl';
+        lbl.style.cssText = `background:${c};animation-delay:${i * 45}ms`;
+        lbl.innerHTML = `<span class="lbl-dot"></span>${obj.name}`;
+        box.appendChild(lbl);
+
+        box.addEventListener('click', e => { e.stopPropagation(); openDrawer(obj, c); });
+        labelsEl.appendChild(box);
+      });
+    }
+
+    // ── Drawer ────────────────────────────────────────────────────────────────────
+    function openDrawer(obj, color) {
+      dName.textContent = obj.name;
+      dName.style.color = color;
+      dMeta.textContent = `Detected by Gemini Vision · ${Math.round(obj.confidence * 100)}% confidence`;
+      dGrammar.innerHTML = buildGrammar(obj.name);
+      drawer.classList.add('open');
+    }
+    function closeDrawer() { drawer.classList.remove('open'); }
+    dClose.addEventListener('click', closeDrawer);
+    vp.addEventListener('click', e => {
+      if (!e.target.closest('.bbox') && !e.target.closest('.drawer')) closeDrawer();
+    });
+  </script>
+</body>
+
+</html>

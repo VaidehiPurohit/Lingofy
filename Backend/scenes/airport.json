@@ -1,0 +1,105 @@
+{
+    "scene": "airport",
+    "ui": {
+        "title": "Airport Check-in",
+        "description": "Navigate travel procedures in Hindi",
+        "level": "Intermediate",
+        "turns": 12,
+        "gradient": "from-sky-500 to-blue-600",
+        "icon": "Plane"
+    },
+    "intents": {
+        "greeting": [
+            "hello",
+            "hi",
+            "hey",
+            "namaste",
+            "नमस्ते",
+            "namaskar"
+        ],
+        "confirmation_yes": [
+            "yes",
+            "ok",
+            "confirm",
+            "theek hai"
+        ],
+        "confirmation_no": [
+            "no",
+            "cancel",
+            "nahi"
+        ],
+        "payment": [
+            "pay",
+            "card",
+            "cash",
+            "upi"
+        ],
+        "closing": [
+            "thanks",
+            "bye",
+            "shukriya"
+        ]
+    },
+    "slots": [
+        "greet",
+        "destination",
+        "passport",
+        "seat_preference"
+    ],
+    "goal_labels": {
+        "greet": "Greet the Officer",
+        "destination": "State your Destination",
+        "passport": "Confirm Passport check",
+        "seat_preference": "Pick Window/Aisle"
+    },
+    "prompts": {
+        "destination": "आप कहाँ की यात्रा कर रहे हैं?",
+        "passport": "क्या आपके पास पासपोर्ट है?",
+        "seat_preference": "आपको कौन सी सीट चाहिए - खिड़की (Window) या गलियारा (Aisle)?"
+    },
+    "templates": {
+        "confirmation": "ठीक है! {destination} के लिए {seat_preference} सीट के साथ आपका चेक-इन हो गया है। क्या ये सही है?",
+        "ask_payment": "धन्यवाद! अतिरिक्त सामान के लिए कृपया भुगतान करें।",
+        "order_reset": "कोई बात नहीं, फिर से बताइये।",
+        "confirm_failed": "हाँ या ना में बताईये।",
+        "payment_failed": "कृपया भुगतान कीजिये।",
+        "closing": "शुभ यात्रा! आपकी यात्रा मंगलमय हो।"
+    },
+    "slot_values": {
+        "destination": {
+            "mumbai": [
+                "mumbai",
+                "मुम्बई"
+            ],
+            "delhi": [
+                "delhi",
+                "दिल्ली"
+            ],
+            "london": [
+                "london",
+                "लंदन"
+            ]
+        },
+        "passport": {
+            "yes": [
+                "yes",
+                "haan",
+                "passport",
+                "है",
+                "जी हाँ"
+            ]
+        },
+        "seat_preference": {
+            "window": [
+                "window",
+                "खिड़की",
+                "khidki"
+            ],
+            "aisle": [
+                "aisle",
+                "side",
+                "गलियारा"
+            ]
+        }
+    }
+}

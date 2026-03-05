@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>Lingofy Scan</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --indigo: #6366f1;
+            --indigo-dark: #4f46e5;
+            --purple: #8b5cf6;
+            --indigo-light: #eef2ff;
+            --indigo-mid: #c7d2fe;
+            --bg: #f1f5f9;
+            --card: #ffffff;
+            --text: #0f172a;
+            --muted: #64748b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --radius: 20px;
+            --shadow: 0 4px 24px rgba(99, 102, 241, 0.10);
+        }
+
+        html,
+        body {
+            height: 100%;
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overscroll-behavior: none;
+        }
+
+        /* ══════════════════════════════════════════
+       DESKTOP LAYOUT
+    ══════════════════════════════════════════ */
+        .app {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 16px 32px;
+        }
+
+        /* Header */
+        .header {
+            width: 100%;
+            max-width: 960px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 24px;
+            padding: 0 4px;
+        }
+
+        .logo {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, var(--indigo), var(--purple));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 17px;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+            flex-shrink: 0;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .header h1 span {
+            color: var(--indigo);
+        }
+
+        .header-badge {
+            margin-left: auto;
+            background: var(--indigo-light);
+            color: var(--indigo);
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid var(--indigo-mid);
+            white-space: nowrap;
+        }
+
+        /* Camera toggle button */
+        .cam-toggle {
+            background: white;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 6px 10px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+        }
+
+        .cam-toggle:hover {
+            background: var(--indigo-light);
+            border-color: var(--indigo-mid);
+        }
+
+        /* Desktop grid */
+        .grid {
+            width: 100%;
+            max-width: 960px;
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 20px;
+            align-items: start;
+        }
+
+        /* ── Camera Card ── */
+        .camera-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            border: 1px solid rgba(99, 102, 241, 0.08);
+        }
+
+        .viewport {
+            position: relative;
+            background: #0a0a14;
+            aspect-ratio: 4/3;
+            overflow: hidden;
+        }
+
+        #video,
+        #canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #canvas {
+            display: none;
+            object-fit: contain;
+            cursor: pointer;
+        }
+
+        /* Scan guide corners */
+        .guide {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .guide-corner {
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            border-color: rgba(255, 255, 255, 0.6);
+            border-style: solid;
+        }
+
+        .guide-corner.tl {
+            top: 20px;
+            left: 20px;
+            border-width: 2px 0 0 2px;
+            border-radius: 4px 0 0 0;
+        }
+
+        .guide-corner.tr {
+            top: 20px;
+            right: 20px;
+            border-width: 2px 2px 0 0;
+            border-radius: 0 4px 0 0;
+        }
+
+        .guide-corner.bl {
+            bottom: 20px;
+            left: 20px;
+            border-width: 0 0 2px 2px;
+            border-radius: 0 0 0 4px;
+        }
+
+        .guide-corner.br {
+            bottom: 20px;
+            right: 20px;
+            border-width: 0 2px 2px 0;
+            border-radius: 0 0 4px 0;
+        }
+
+        .guide-hint {
+            position: absolute;
+            bottom: 14px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.55);
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* Caption overlay */
+        #caption-bar {
+            display: none;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            padding: 24px 14px 12px;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 12px;
+            font-style: italic;
+        }
+
+        /* Loading overlay */
+        #loader {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background: rgba(10, 10, 20, 0.75);
+            backdrop-filter: blur(4px);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            color: white;
+        }
+
+        #loader.show {
+            display: flex;
+        }
+
+        .loader-ring {
+            width: 44px;
+            height: 44px;
+            border: 3px solid rgba(255, 255, 255, 0.15);
+            border-top-color: var(--indigo);
+            border-radius: 50%;
+            animation: spin 0.75s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loader-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .loader-step {
+            font-size: 13px;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+
+        .loader-step.active {
+            opacity: 1;
+            font-weight: 600;
+        }
+
+        /* Start overlay */
+        #start-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            background: #0a0a14;
+        }
+
+        .start-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: rgba(99, 102, 241, 0.15);
+            border: 2px solid rgba(99, 102, 241, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 0 0 16px rgba(99, 102, 241, 0);
+            }
+        }
+
+        #start-overlay p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 13px;
+        }
+
+        /* Controls bar */
+        .controls {
+            padding: 14px 16px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 13px 20px;
+            border-radius: 14px;
+            border: none;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        .btn-primary {
+            flex: 1;
+            background: var(--indigo);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--indigo-dark);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            flex: 1;
+            background: #f1f5f9;
+            color: var(--text);
+            border: 1.5px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        /* Detected chips */
+        #chips {
+            padding: 0 14px 14px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .chip {
+            padding: 7px 14px;
+            background: var(--indigo-light);
+            color: var(--indigo);
+            border: 1.5px solid var(--indigo-mid);
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chip:hover,
+        .chip.active {
+            background: var(--indigo);
+            color: white;
+            border-color: var(--indigo);
+        }
+
+        .chip-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+            opacity: 0.6;
+        }
+
+        /* ── Word Panel ── */
+        .word-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            border: 1px solid rgba(99, 102, 241, 0.08);
+            position: sticky;
+            top: 20px;
+        }
+
+        .word-header {
+            background: linear-gradient(135deg, var(--indigo) 0%, var(--purple) 100%);
+            padding: 22px 20px 18px;
+            color: white;
+            min-height: 170px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decorative circle */
+        .word-header::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .word-header::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: -20px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Empty state inside header */
+        .empty-state {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .empty-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .empty-state p {
+            color: rgba(255, 255, 255, 0.55);
+            font-size: 13px;
+            text-align: center;
+            padding: 0 24px;
+        }
+
+        /* Word content */
+        .word-tag {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.65;
+            margin-bottom: 4px;
+        }
+
+        .word-en {
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+
+        .word-hi {
+            font-size: 34px;
+            font-weight: 700;
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            line-height: 1.2;
+            margin-top: 2px;
+        }
+
+        .word-tr {
+            font-size: 14px;
+            opacity: 0.75;
+            margin-top: 2px;
+        }
+
+        .word-badges {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(4px);
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* Word body */
+        .word-body {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .example-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 14px;
+            padding: 14px;
+        }
+
+        .example-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: #3b82f6;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 6px;
+        }
+
+        .example-hi {
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            color: var(--text);
+        }
+
+        .example-en {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+        .btn-tts {
+            width: 100%;
+            padding: 13px;
+            background: var(--indigo);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.15s;
+        }
+
+        .btn-tts:hover {
+            background: var(--indigo-dark);
+        }
+
+        .btn-tts:active {
+            transform: scale(0.98);
+        }
+
+        .btn-save {
+            width: 100%;
+            padding: 13px;
+            background: white;
+            color: var(--text);
+            border: 1.5px solid #e2e8f0;
+            border-radius: 14px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.15s;
+        }
+
+        .btn-save:hover {
+            background: #f8fafc;
+        }
+
+        .btn-save.saved {
+            border-color: var(--success);
+            color: var(--success);
+            background: #f0fdf4;
+        }
+
+        .btn-save:active {
+            transform: scale(0.98);
+        }
+
+        /* Status bar */
+        #status {
+            width: 100%;
+            max-width: 960px;
+            margin-top: 14px;
+            padding: 11px 16px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            display: none;
+        }
+
+        #status.error {
+            background: #fef2f2;
+            color: var(--danger);
+            border: 1px solid #fecaca;
+            display: block;
+        }
+
+        #status.info {
+            background: var(--indigo-light);
+            color: var(--indigo);
+            border: 1px solid var(--indigo-mid);
+            display: block;
+        }
+
+        #status.success {
+            background: #f0fdf4;
+            color: var(--success);
+            border: 1px solid #bbf7d0;
+            display: block;
+        }
+
+
+        /* ══════════════════════════════════════════
+       MOBILE LAYOUT  (≤ 640px)
+    ══════════════════════════════════════════ */
+        @media (max-width: 640px) {
+
+            .app {
+                padding: 0;
+                background: #0a0a14;
+                height: 100vh;
+                overflow: hidden;
+                justify-content: flex-start;
+            }
+
+            /* Mobile header overlays camera */
+            .header {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 20;
+                padding: 48px 16px 12px;
+                background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 0%, transparent 100%);
+                margin-bottom: 0;
+            }
+
+            .header h1 {
+                color: white;
+            }
+
+            .header-badge {
+                background: rgba(255, 255, 255, 0.15);
+                color: white;
+                border-color: rgba(255, 255, 255, 0.2);
+                backdrop-filter: blur(8px);
+            }
+
+            .cam-toggle {
+                background: rgba(255, 255, 255, 0.15);
+                border-color: rgba(255, 255, 255, 0.2);
+                backdrop-filter: blur(8px);
+            }
+
+            /* Full screen camera */
+            .grid {
+                display: block;
+                width: 100%;
+            }
+
+            .camera-card {
+                border-radius: 0;
+                box-shadow: none;
+                border: none;
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .viewport {
+                flex: 1;
+                aspect-ratio: unset;
+                height: auto;
+            }
+
+            /* Controls float over camera at bottom */
+            .controls {
+                position: absolute;
+                bottom: 180px;
+                left: 0;
+                right: 0;
+                padding: 0 20px;
+                z-index: 20;
+                background: transparent;
+            }
+
+            .btn-primary {
+                background: rgba(99, 102, 241, 0.9);
+                backdrop-filter: blur(12px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+                padding: 16px;
+                font-size: 15px;
+            }
+
+            .btn-secondary {
+                background: rgba(255, 255, 255, 0.15);
+                backdrop-filter: blur(12px);
+                border-color: rgba(255, 255, 255, 0.2);
+                color: white;
+            }
+
+            /* Chips float above controls */
+            #chips {
+                position: absolute;
+                bottom: 250px;
+                left: 0;
+                right: 0;
+                padding: 0 16px;
+                z-index: 20;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+
+            #chips::-webkit-scrollbar {
+                display: none;
+            }
+
+            .chip {
+                flex-shrink: 0;
+                background: rgba(255, 255, 255, 0.15);
+                border-color: rgba(255, 255, 255, 0.25);
+                color: white;
+                backdrop-filter: blur(8px);
+            }
+
+            .chip.active,
+            .chip:hover {
+                background: var(--indigo);
+                border-color: var(--indigo);
+                color: white;
+            }
+
+            /* Caption bar */
+            #caption-bar {
+                font-size: 11px;
+            }
+
+            /* Word panel becomes a BOTTOM SHEET */
+            .word-card {
+                display: none;
+                /* hidden by default on mobile */
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                z-index: 100;
+                border-radius: 24px 24px 0 0;
+                border: none;
+                box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.35);
+                max-height: 75vh;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+                animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+                top: auto;
+            }
+
+            .word-card.visible {
+                display: block;
+            }
+
+            @keyframes slideUp {
+                from {
+                    transform: translateY(100%);
+                    opacity: 0;
+                }
+
+                to {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
+            }
+
+            /* Bottom sheet handle */
+            .sheet-handle {
+                display: block;
+                width: 36px;
+                height: 4px;
+                background: #e2e8f0;
+                border-radius: 2px;
+                margin: 12px auto 0;
+            }
+
+            /* Close button for bottom sheet */
+            .sheet-close {
+                display: flex;
+                position: absolute;
+                top: 16px;
+                right: 16px;
+                z-index: 10;
+                background: rgba(255, 255, 255, 0.2);
+                border: none;
+                border-radius: 50%;
+                width: 32px;
+                height: 32px;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                font-size: 16px;
+                color: white;
+            }
+
+            /* Shorter word header on mobile */
+            .word-header {
+                min-height: 140px;
+                padding: 16px 20px 16px;
+            }
+
+            .word-hi {
+                font-size: 28px;
+            }
+
+            /* Status bar */
+            #status {
+                position: fixed;
+                bottom: 20px;
+                left: 16px;
+                right: 16px;
+                margin: 0;
+                z-index: 50;
+                border-radius: 14px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            }
+
+            /* Dim overlay when sheet is open */
+            #sheet-backdrop {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 90;
+                backdrop-filter: blur(2px);
+            }
+
+            #sheet-backdrop.show {
+                display: block;
+            }
+        }
+
+        /* Tablet */
+        @media (min-width: 641px) and (max-width: 900px) {
+            .grid {
+                grid-template-columns: 1fr 280px;
+            }
+
+            .sheet-handle,
+            .sheet-close {
+                display: none;
+            }
+        }
+
+        @media (min-width: 901px) {
+
+            .sheet-handle,
+            .sheet-close {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">L</div>
+            <h1>Lingo<span>fy</span></h1>
+            <button class="cam-toggle" id="camToggle" onclick="toggleCamera()" title="Switch camera">🔄</button>
+            <div class="header-badge">📷 Scan</div>
+        </header>
+
+        <!-- Sheet backdrop (mobile only) -->
+        <div id="sheet-backdrop" onclick="closeSheet()"></div>
+
+        <div class="grid">
+
+            <!-- Camera Card -->
+            <div class="camera-card">
+                <div class="viewport">
+
+                    <video id="video" autoplay muted playsinline></video>
+                    <canvas id="canvas" onclick="handleCanvasClick(event)"></canvas>
+
+                    <!-- Start overlay -->
+                    <div id="start-overlay">
+                        <div class="start-icon">📷</div>
+                        <p>Tap to start camera</p>
+                        <button class="btn btn-primary" style="width:auto;padding:12px 28px" onclick="startCamera()">
+                            Start Camera
+                        </button>
+                    </div>
+
+                    <!-- Scan guide -->
+                    <div class="guide" id="guide" style="display:none">
+                        <div class="guide-corner tl"></div>
+                        <div class="guide-corner tr"></div>
+                        <div class="guide-corner bl"></div>
+                        <div class="guide-corner br"></div>
+                        <p class="guide-hint">Point at objects • tap Scan</p>
+                    </div>
+
+                    <!-- Loading -->
+                    <div id="loader">
+                        <div class="loader-ring"></div>
+                        <div class="loader-steps">
+                            <div class="loader-step" id="step1">🖼 BLIP: reading scene...</div>
+                            <div class="loader-step" id="step2">🔤 Extracting objects...</div>
+                            <div class="loader-step" id="step3">📦 YOLO: drawing boxes...</div>
+                            <div class="loader-step" id="step4">✅ Verifying...</div>
+                            <div class="loader-step" id="step5">🇮🇳 Translating to Hindi...</div>
+                        </div>
+                    </div>
+
+                    <!-- Caption bar -->
+                    <div id="caption-bar"></div>
+
+                </div><!-- /viewport -->
+
+                <!-- Controls -->
+                <div class="controls" id="controls" style="display:none">
+                    <button class="btn btn-primary" id="scanBtn" onclick="scan()">🔍 Scan Objects</button>
+                    <button class="btn btn-secondary" id="resetBtn" onclick="reset()" style="display:none">🔄
+                        Again</button>
+                </div>
+
+                <!-- Object chips -->
+                <div id="chips"></div>
+
+            </div><!-- /camera-card -->
+
+
+            <!-- Word Panel (desktop: right column | mobile: bottom sheet) -->
+            <div class="word-card" id="wordCard">
+                <div class="sheet-handle"></div>
+                <button class="sheet-close" onclick="closeSheet()">✕</button>
+
+                <div class="word-header" id="wordHeader">
+                    <div class="empty-state" id="emptyState">
+                        <div class="empty-icon">📖</div>
+                        <p>Scan objects then tap a word to learn it in Hindi</p>
+                    </div>
+                </div>
+
+                <div class="word-body" id="wordBody" style="display:none"></div>
+            </div>
+
+        </div><!-- /grid -->
+
+        <div id="status"></div>
+
+    </div><!-- /app -->
+
+
+    <script>
+        // ── Config ────────────────────────────────────────────────────
+        const BACKEND = "http://localhost:5000"; // Change to ngrok URL for Colab
+
+        // ── State ─────────────────────────────────────────────────────
+        let stream = null;
+        let facingMode = "environment"; // rear camera default (mobile)
+        let isMobile = window.innerWidth <= 640;
+        let detections = [];
+
+        // On desktop default to front camera
+        if (!isMobile) facingMode = "user";
+
+        // ── Camera ────────────────────────────────────────────────────
+        async function startCamera() {
+            try {
+                if (stream) stream.getTracks().forEach(t => t.stop());
+
+                const constraints = {
+                    video: {
+                        facingMode,
+                        width: { ideal: isMobile ? 1280 : 1280 },
+                        height: { ideal: isMobile ? 720 : 960 }
+                    }
+                };
+
+                stream = await navigator.mediaDevices.getUserMedia(constraints);
+                const video = document.getElementById("video");
+                video.srcObject = stream;
+
+                document.getElementById("start-overlay").style.display = "none";
+                document.getElementById("guide").style.display = "block";
+                document.getElementById("controls").style.display = "flex";
+                showStatus("Camera ready! Point at objects and tap Scan.", "info");
+            } catch (e) {
+                showStatus("❌ Camera access denied. Please allow camera permissions.", "error");
+            }
+        }
+
+        function toggleCamera() {
+            facingMode = facingMode === "user" ? "environment" : "user";
+            if (stream) startCamera();
+        }
+
+        // ── Scan ──────────────────────────────────────────────────────
+        async function scan() {
+            const video = document.getElementById("video");
+            const canvas = document.getElementById("canvas");
+            const ctx = canvas.getContext("2d");
+
+            // Freeze frame
+            canvas.width = video.videoWidth || 1280;
+            canvas.height = video.videoHeight || 720;
+            ctx.drawImage(video, 0, 0);
+
+            video.style.display = "none";
+            canvas.style.display = "block";
+            document.getElementById("guide").style.display = "none";
+            document.getElementById("scanBtn").style.display = "none";
+            document.getElementById("resetBtn").style.display = "flex";
+
+            // Show loader
+            document.getElementById("loader").classList.add("show");
+            animateSteps();
+
+            const base64 = canvas.toDataURL("image/jpeg", 0.92);
+
+            try {
+                const res = await fetch('http://192.168.0.102:5000/api/detect', {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ image: base64 })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    detections = data.detections || [];
+
+                    // Show BLIP caption
+                    if (data.caption) {
+                        const capBar = document.getElementById("caption-bar");
+                        capBar.textContent = `"${data.caption}"`;
+                        capBar.style.display = "block";
+                    }
+
+                    if (detections.length > 0) {
+                        drawBoxes(ctx, detections);
+                        renderChips(detections);
+                        showStatus(`✅ Found ${detections.length} object(s)! Tap any to learn Hindi.`, "success");
+                    } else {
+                        showStatus("🔍 No objects detected. Try better lighting or move closer.", "info");
+                    }
+                } else {
+                    showStatus(`❌ Error: ${data.error || "Unknown"}`, "error");
+                }
+            } catch (e) {
+                showStatus(`❌ Cannot reach backend. Is app.py running at ${BACKEND}?`, "error");
+            } finally {
+                document.getElementById("loader").classList.remove("show");
+                resetSteps();
+            }
+        }
+
+        // ── Loader step animation ─────────────────────────────────────
+        let stepInterval = null;
+        function animateSteps() {
+            let i = 1;
+            const steps = document.querySelectorAll(".loader-step");
+            steps.forEach(s => s.classList.remove("active"));
+            steps[0].classList.add("active");
+            stepInterval = setInterval(() => {
+                steps.forEach(s => s.classList.remove("active"));
+                if (i < steps.length) steps[i].classList.add("active");
+                i = (i + 1) % steps.length;
+            }, 1800);
+        }
+        function resetSteps() {
+            clearInterval(stepInterval);
+            document.querySelectorAll(".loader-step").forEach(s => s.classList.remove("active"));
+        }
+
+        // ── Draw bounding boxes ───────────────────────────────────────
+        const BOX_COLORS = ["#6366f1", "#8b5cf6", "#06b6d4", "#10b981", "#f59e0b", "#ec4899"];
+
+        function drawBoxes(ctx, dets) {
+            dets.forEach((det, i) => {
+                if (!det.bbox || !det.has_box) return;
+                const [x, y, w, h] = det.bbox;
+                const color = BOX_COLORS[i % BOX_COLORS.length];
+
+                // Box
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2.5;
+                ctx.strokeRect(x, y, w, h);
+
+                // Corner accents
+                const cs = 14;
+                ctx.lineWidth = 3.5;
+                [[x, y, cs, 0, cs], [x + w, y, -cs, 0, -cs], [x, y + h, cs, 0, cs], [x + w, y + h, -cs, 0, -cs]].forEach(([px, py, dx, dy, ddy]) => {
+                    ctx.beginPath();
+                    ctx.moveTo(px, py + cs * Math.sign(py === y ? 1 : -1));
+                    ctx.lineTo(px, py);
+                    ctx.lineTo(px + cs * Math.sign(px === x ? 1 : -1), py);
+                    ctx.strokeStyle = color;
+                    ctx.stroke();
+                });
+
+                // Label pill
+                const label = det.transliteration ? `${det.label} · ${det.transliteration}` : det.label;
+                ctx.font = "bold 12px DM Sans, sans-serif";
+                const tw = ctx.measureText(label).width;
+                ctx.fillStyle = color;
+                roundRect(ctx, x, y - 28, tw + 16, 24, 6);
+                ctx.fill();
+                ctx.fillStyle = "white";
+                ctx.fillText(label, x + 8, y - 11);
+
+                // Hindi text below box
+                if (det.hindi) {
+                    ctx.font = "bold 15px Noto Sans Devanagari, sans-serif";
+                    ctx.fillStyle = color;
+                    ctx.fillText(det.hindi, x + 4, y + h + 20);
+                }
+            });
+        }
+
+        function roundRect(ctx, x, y, w, h, r) {
+            ctx.beginPath();
+            ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y);
+            ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+            ctx.lineTo(x + w, y + h - r);
+            ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+            ctx.lineTo(x + r, y + h);
+            ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+            ctx.lineTo(x, y + r);
+            ctx.quadraticCurveTo(x, y, x + r, y);
+            ctx.closePath();
+        }
+
+        // ── Canvas click — tap a box to select ───────────────────────
+        function handleCanvasClick(e) {
+            const canvas = document.getElementById("canvas");
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const cx = (e.clientX - rect.left) * scaleX;
+            const cy = (e.clientY - rect.top) * scaleY;
+
+            for (const det of detections) {
+                if (!det.bbox) continue;
+                const [x, y, w, h] = det.bbox;
+                if (cx >= x && cx <= x + w && cy >= y && cy <= y + h) {
+                    showWord(det);
+                    highlightChip(det.label);
+                    return;
+                }
+            }
+        }
+
+        // ── Chips ─────────────────────────────────────────────────────
+        function renderChips(dets) {
+            const container = document.getElementById("chips");
+            container.innerHTML = "";
+            dets.forEach(det => {
+                const chip = document.createElement("button");
+                chip.className = "chip";
+                chip.dataset.label = det.label;
+                chip.innerHTML = `<span class="chip-dot"></span>${det.label}${det.transliteration ? ` · ${det.transliteration}` : ""}`;
+                chip.onclick = () => { showWord(det); highlightChip(det.label); };
+                container.appendChild(chip);
+            });
+        }
+
+        function highlightChip(label) {
+            document.querySelectorAll(".chip").forEach(c => {
+                c.classList.toggle("active", c.dataset.label === label);
+            });
+        }
+
+        // ── Word Panel ────────────────────────────────────────────────
+        function showWord(word) {
+            // Header
+            const header = document.getElementById("wordHeader");
+            document.getElementById("emptyState")?.remove();
+            header.innerHTML = `
+      <button class="sheet-close" onclick="closeSheet()">✕</button>
+      <div class="word-tag">Detected Object</div>
+      <div class="word-en">${word.label}</div>
+      ${word.hindi ? `<div class="word-hi">${word.hindi}</div>` : ""}
+      ${word.transliteration ? `<div class="word-tr">${word.transliteration}</div>` : ""}
+      <div class="word-badges">
+        <span class="badge">${word.has_box ? "📦 Detected" : "📝 In scene"}</span>
+        ${word.gender ? `<span class="badge">${word.gender === "m" ? "♂ Masculine" : word.gender === "f" ? "♀ Feminine" : "Neutral"}</span>` : ""}
+      </div>
+    `;
+
+            // Body
+            const body = document.getElementById("wordBody");
+            body.style.display = "flex";
+            body.innerHTML = `
+      ${word.example_sentence ? `
+        <div class="example-box">
+          <div class="example-label">✨ Example Sentence</div>
+          <div class="example-hi">${word.example_sentence}</div>
+        </div>
+      ` : ""}
+      ${word.hindi ? `
+        <button class="btn-tts" onclick="speak('${(word.example_sentence || word.hindi).replace(/'/g, "\\'")}')">
+          🔊 Play Hindi Pronunciation
+        </button>
+      ` : ""}
+      <button class="btn-save" id="saveBtn" onclick="saveWord(this, ${JSON.stringify(JSON.stringify(word))})">
+        ＋ Save to My Vocabulary
+      </button>
+    `;
+
+            // Mobile: show bottom sheet + backdrop
+            if (isMobile) {
+                document.getElementById("wordCard").classList.add("visible");
+                document.getElementById("sheet-backdrop").classList.add("show");
+            }
+        }
+
+        function closeSheet() {
+            document.getElementById("wordCard").classList.remove("visible");
+            document.getElementById("sheet-backdrop").classList.remove("show");
+        }
+
+        // ── TTS ───────────────────────────────────────────────────────
+        function speak(text) {
+            window.speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(text);
+            u.lang = "hi-IN";
+            u.rate = 0.82;
+            window.speechSynthesis.speak(u);
+        }
+
+        // ── Save word ─────────────────────────────────────────────────
+        function saveWord(btn, wordJson) {
+            const word = JSON.parse(wordJson);
+            const vocab = JSON.parse(localStorage.getItem("lingofy_vocab") || "[]");
+            if (!vocab.find(v => v.label === word.label)) {
+                vocab.push({ ...word, savedAt: new Date().toISOString(), source: "scan" });
+                localStorage.setItem("lingofy_vocab", JSON.stringify(vocab));
+            }
+            btn.className = "btn-save saved";
+            btn.textContent = "✓ Saved!";
+        }
+
+        // ── Reset ─────────────────────────────────────────────────────
+        function reset() {
+            const video = document.getElementById("video");
+            const canvas = document.getElementById("canvas");
+            const ctx = canvas.getContext("2d");
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            canvas.style.display = "none";
+            video.style.display = "block";
+
+            document.getElementById("guide").style.display = "block";
+            document.getElementById("scanBtn").style.display = "flex";
+            document.getElementById("resetBtn").style.display = "none";
+            document.getElementById("chips").innerHTML = "";
+            document.getElementById("caption-bar").style.display = "none";
+            document.getElementById("wordBody").style.display = "none";
+            document.getElementById("wordHeader").innerHTML = `
+      <div class="empty-state" id="emptyState">
+        <div class="empty-icon">📖</div>
+        <p>Scan objects then tap a word to learn it in Hindi</p>
+      </div>`;
+
+            closeSheet();
+            hideStatus();
+            detections = [];
+        }
+
+        // ── Status ────────────────────────────────────────────────────
+        function showStatus(msg, type) {
+            const el = document.getElementById("status");
+            el.textContent = msg;
+            el.className = type;
+        }
+        function hideStatus() {
+            const el = document.getElementById("status");
+            el.className = "";
+            el.style.display = "none";
+        }
+
+        // ── Resize handler ────────────────────────────────────────────
+        window.addEventListener("resize", () => {
+            isMobile = window.innerWidth <= 640;
+            if (!isMobile) {
+                document.getElementById("wordCard").classList.remove("visible");
+                document.getElementById("sheet-backdrop").classList.remove("show");
+            }
+        });
+
+        // ── Prevent default touch scroll inside sheet ─────────────────
+        document.getElementById("wordCard").addEventListener("touchmove", e => {
+            e.stopPropagation();
+        }, { passive: true });
+    </script>
+</body>
+
+</html>

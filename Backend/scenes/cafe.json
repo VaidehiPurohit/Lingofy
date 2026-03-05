@@ -1,0 +1,201 @@
+{
+    "scene": "cafe",
+    "ui": {
+        "title": "The Cozy Cafe",
+        "description": "Order food and interact with waiters",
+        "level": "Beginner",
+        "turns": 8,
+        "gradient": "from-amber-500 to-orange-500",
+        "icon": "Coffee"
+    },
+    "slot_options": {
+        "customizations": {
+            "combination_logic": {
+                "canonical": "चीनी और दूध दोनों",
+                "requires": [
+                    "sugar",
+                    "milk"
+                ]
+            }
+        }
+    },
+    "refinement_values": {
+        "drink": [
+            "any"
+        ]
+    },
+    "intents": {
+        "greeting": [
+            "hello",
+            "hi",
+            "hey",
+            "good morning",
+            "morning",
+            "namaste",
+            "namaskar",
+            "नमस्ते",
+            "नमस्कार",
+            "हेलो"
+        ],
+        "confirmation_yes": [
+            "yes",
+            "ok",
+            "yep",
+            "confirm",
+            "haan",
+            "जी हाँ",
+            "ji ha",
+            "theek hai",
+            "जी",
+            "correct",
+            "thik hai"
+        ],
+        "confirmation_no": [
+            "no",
+            "cancel",
+            "stop",
+            "reset",
+            "nahi",
+            "नहीं",
+            "galat",
+            "no thanks"
+        ],
+        "payment": [
+            "pay",
+            "upi",
+            "cash",
+            "card",
+            "paisa",
+            "dena",
+            "bill",
+            "paid",
+            "card chalega",
+            "online",
+            "gpay",
+            "phonepe",
+            "card se"
+        ],
+        "closing": [
+            "thanks",
+            "thank you",
+            "धन्यवाद",
+            "bye",
+            "shukriya",
+            "alvida"
+        ]
+    },
+    "slots": [
+        "greet",
+        "drink",
+        "size",
+        "customizations"
+    ],
+    "goal_labels": {
+        "greet": "Greet the Barista",
+        "drink": "Choose Coffee Type",
+        "size": "Select Cup Size",
+        "customizations": "Sugar & Milk Prefs"
+    },
+    "prompts": {
+        "drink": "आप कौन सी कॉफी लेना चाहेंगे? लैटे, कैप्पुचिनो या अमेरिकानो?",
+        "size": "आपको कौन सा साइज चाहिए? छोटा, मीडियम या बड़ा?",
+        "customizations": "आपको चीनी और दूध कैसा चाहिए? (जैसे: चीनी कम, दूध ज़्यादा)"
+    },
+    "templates": {
+        "confirmation": "ठीक है! एक {size} {drink} ({customizations}) तैयार किया जा रहा है। क्या आप ऑर्डर कन्फर्म करते हैं?",
+        "ask_payment": "धन्यवाद! कृपया अब भुगतान (Payment) करें।",
+        "order_reset": "कोई बात नहीं। आप फिर से अपना ऑर्डर बता सकते हैं। आप क्या लेंगे?",
+        "confirm_failed": "कृपया हाँ या ना में उत्तर दें। क्या आप ऑर्डर कन्फर्म करते हैं?",
+        "payment_failed": "कृपया भुगतान पूरा करें।",
+        "closing": "बहुत बढ़िया! आपका कॉफी ऑर्डर पूरा हुआ। आपका दिन शुभ हो!"
+    },
+    "slot_values": {
+        "drink": {
+            "cappuccino": [
+                "cappuccino",
+                "capuchino",
+                "कैप्पुचिनो",
+                "cappucino"
+            ],
+            "latte": [
+                "latte",
+                "लट्टे",
+                "लैटे",
+                "लेटो"
+            ],
+            "americano": [
+                "americano",
+                "अमेरिकानो",
+                "आमेरिकानो"
+            ],
+            "any": [
+                "coffee",
+                "कॉफी",
+                "kafi",
+                "कौफी"
+            ]
+        },
+        "size": {
+            "small": [
+                "small",
+                "छोटा",
+                "chhota",
+                "chota",
+                "little"
+            ],
+            "medium": [
+                "medium",
+                "मीडियम",
+                "midium"
+            ],
+            "large": [
+                "large",
+                "बड़ा",
+                "bada",
+                "vada",
+                "big"
+            ]
+        },
+        "customizations": {
+            "चीनी और दूध दोनों": [
+                "both",
+                "dono",
+                "sugar and milk",
+                "दोनों",
+                "cheeni aur doodh",
+                "chini aur dudh",
+                "chini dudh",
+                "chini kam dudh kam",
+                "chini kam doodh jyada"
+            ],
+            "चीनी": [
+                "sugar",
+                "चीनी",
+                "cheeni",
+                "chini",
+                "shakar",
+                "chini kam",
+                "chini jyada"
+            ],
+            "दूध": [
+                "milk",
+                "दूध",
+                "doodh",
+                "dudh",
+                "dudh kam",
+                "dudh jyada"
+            ],
+            "बिना चीनी/दूध": [
+                "nothing",
+                "none",
+                "no",
+                "nahi",
+                "kuch nahi",
+                "plain",
+                "black",
+                "bin chini",
+                "bina"
+            ]
+        }
+    }
+}

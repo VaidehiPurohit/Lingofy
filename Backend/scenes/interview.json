@@ -1,0 +1,114 @@
+{
+    "scene": "interview",
+    "ui": {
+        "title": "Job Interview",
+        "description": "Practice professional interview questions",
+        "level": "Advanced",
+        "turns": 15,
+        "gradient": "from-violet-500 to-purple-600",
+        "icon": "GraduationCapIcon"
+    },
+    "intents": {
+        "greeting": [
+            "hello",
+            "hi",
+            "hey",
+            "namaste",
+            "नमस्ते"
+        ],
+        "confirmation_yes": [
+            "yes",
+            "ok",
+            "haan",
+            "theek hai"
+        ],
+        "confirmation_no": [
+            "no",
+            "cancel",
+            "nahi"
+        ],
+        "payment": [
+            "pay",
+            "bill"
+        ],
+        "closing": [
+            "thanks",
+            "bye",
+            "shukriya"
+        ]
+    },
+    "slots": [
+        "greet",
+        "position",
+        "experience",
+        "salary_expectation"
+    ],
+    "goal_labels": {
+        "greet": "Greet the Interviewer",
+        "position": "State Position",
+        "experience": "Mention Experience",
+        "salary_expectation": "Salary Expectation"
+    },
+    "prompts": {
+        "position": "आप किस पद (Position) के लिए इंटरव्यू दे रहे हैं? (जैसे: मैनेजर, डेवलपर, शेफ)",
+        "experience": "आपको कितने साल का अनुभव (Experience) है?",
+        "salary_expectation": "आपकी सैलरी एक्सपेक्टेशन क्या है?"
+    },
+    "templates": {
+        "confirmation": "ठीक है! तो आप {position} के पद के लिए हैं, आपके पास {experience} का अनुभव है। क्या ये सही है?",
+        "ask_payment": "धन्यवाद! कृपया प्रोसेसिंग फीस का भुगतान करें।",
+        "order_reset": "कोई बात नहीं, फिर से बताइये।",
+        "confirm_failed": "हाँ या ना में उत्तर दें।",
+        "payment_failed": "भुगतान करें।",
+        "closing": "इंटरव्यू देने के लिए धन्यवाद! हम आपको जल्दी ही सूचित करेंगे।"
+    },
+    "slot_values": {
+        "position": {
+            "manager": [
+                "manager",
+                "मैनेजर"
+            ],
+            "developer": [
+                "developer",
+                "डेवलपर",
+                "software"
+            ],
+            "chef": [
+                "chef",
+                "शेफ",
+                "cook"
+            ]
+        },
+        "experience": {
+            "one_year": [
+                "one year",
+                "1 year",
+                "ek saal",
+                "एक साल"
+            ],
+            "five_years": [
+                "five years",
+                "5 years",
+                "panch saal",
+                "पाँच साल"
+            ],
+            "fresher": [
+                "fresher",
+                "no experience",
+                "fresar"
+            ]
+        },
+        "salary_expectation": {
+            "reasonable": [
+                "reasonable",
+                "market rate",
+                "30k",
+                "50k"
+            ],
+            "negotiable": [
+                "negotiable",
+                "kuch bhi"
+            ]
+        }
+    }
+}

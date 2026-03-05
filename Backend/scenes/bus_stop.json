@@ -1,0 +1,128 @@
+{
+    "scene": "bus_stop",
+    "ui": {
+        "title": "At the Bus Stop",
+        "description": "Buy tickets and check bus timings",
+        "level": "Beginner",
+        "turns": 10,
+        "gradient": "from-teal-500 to-emerald-600",
+        "icon": "Bus"
+    },
+    "intents": {
+        "greeting": [
+            "hello",
+            "hi",
+            "namaste",
+            "नमस्ते",
+            "bhai sahob"
+        ],
+        "confirmation_yes": [
+            "yes",
+            "ok",
+            "haan",
+            "ji haan",
+            "sahi hai"
+        ],
+        "confirmation_no": [
+            "no",
+            "cancel",
+            "nahi",
+            "galat"
+        ],
+        "payment": [
+            "pay",
+            "cash",
+            "paisa",
+            "ticket ke paise",
+            "change"
+        ],
+        "closing": [
+            "thanks",
+            "shukriya",
+            "chalo theek hai",
+            "bye"
+        ]
+    },
+    "slots": [
+        "greet",
+        "destination",
+        "ticket_type",
+        "passenger_count"
+    ],
+    "goal_labels": {
+        "greet": "Greet the Conductor/Driver",
+        "destination": "Mention Destination",
+        "ticket_type": "Single or Return?",
+        "passenger_count": "Number of Passengers"
+    },
+    "prompts": {
+        "destination": "आप कहाँ जाना चाहते हैं? (जैसे: दिल्ली, मुंबई, एयरपोर्ट)",
+        "ticket_type": "क्या आपको आने-जाने का टिकट (Return) चाहिए या सिर्फ जाने का (Single)?",
+        "passenger_count": "कितने लोगों का टिकट चाहिए?"
+    },
+    "templates": {
+        "confirmation": "ठीक है, {destination} के लिए {passenger_count} लोगों का {ticket_type} टिकट। क्या ये सही है?",
+        "ask_payment": "धन्यवाद। टिकट के पैसे दे दीजिये।",
+        "order_reset": "कोई बात नहीं, फिर से अपनी मंजिल बताएं।",
+        "confirm_failed": "क्या ये सही है? कृपया हाँ या ना में बताएं।",
+        "payment_failed": "कृपया टिकट के पैसे दें।",
+        "closing": "ये लीजिये आपका टिकट। आपकी यात्रा मंगलमय हो!"
+    },
+    "slot_values": {
+        "destination": {
+            "delhi": [
+                "delhi",
+                "dilli",
+                "दिल्ली",
+                "delhi station"
+            ],
+            "mumbai": [
+                "mumbai",
+                "bambai",
+                "मुंबई",
+                "bombay"
+            ],
+            "airport": [
+                "airport",
+                "हवाई अड्डा",
+                "aerodrome"
+            ]
+        },
+        "ticket_type": {
+            "single": [
+                "single",
+                "one way",
+                "ek side",
+                "सिर्फ जाने का"
+            ],
+            "return": [
+                "return",
+                "round trip",
+                "dono side",
+                "आने-जाने का"
+            ]
+        },
+        "passenger_count": {
+            "one": [
+                "one",
+                "1",
+                "ek",
+                "एक",
+                "akela"
+            ],
+            "two": [
+                "two",
+                "2",
+                "do",
+                "दो",
+                "hum do"
+            ],
+            "three": [
+                "three",
+                "3",
+                "teen",
+                "तीन"
+            ]
+        }
+    }
+}
