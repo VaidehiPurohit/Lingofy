@@ -9,7 +9,11 @@ import {
   TrendingUp,
   User,
   Sparkles,
+<<<<<<< Updated upstream
   SpellCheck ,
+=======
+  SpellCheck,
+>>>>>>> Stashed changes
 } from 'lucide-react'
 
 const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
@@ -17,15 +21,19 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 
   const menuItems = [
     { name: 'Home', href: 'home', icon: Home },
+<<<<<<< Updated upstream
     { name: 'Alphabets', href: 'alphabets', icon: SpellCheck  },
+=======
+    { name: 'Alphabets', href: 'alphabets', icon: SpellCheck },
+>>>>>>> Stashed changes
     { name: 'Lessons', href: 'lessons', icon: BookOpen },
     { name: 'Scenes', href: 'scenes', icon: MessageSquare },
     { name: 'Slang', href: 'slang', icon: Hash },
     { name: 'Quiz', href: 'quiz', icon: Trophy },
     { name: 'Progress', href: 'progress', icon: TrendingUp },
-    { name: 'Recommendations', href:'recommendation',icon: Sparkles},
+    { name: 'Recommendations', href: 'recommendation', icon: Sparkles },
     { name: 'Profile', href: 'profile', icon: User },
-    
+
   ]
 
   useEffect(() => {
@@ -55,10 +63,9 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             end
             className={({ isActive }) =>
               `flex items-center gap-3 px-4 py-2.5 rounded-xl text-lg font-medium transition
-              ${
-                isActive
-                  ? 'bg-indigo-50 text-indigo-700'
-                  : 'text-gray-700 hover:bg-gray-100'
+              ${isActive
+                ? 'bg-indigo-50 text-indigo-700'
+                : 'text-gray-700 hover:bg-gray-100'
               }`
             }
           >

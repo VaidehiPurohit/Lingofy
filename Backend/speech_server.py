@@ -8,12 +8,18 @@ import uuid
 import os
 
 app = Flask(__name__)
+<<<<<<< Updated upstream
 CORS(app)  # 🔥 Allow React (localhost:5173) to access API
 
 
 # ================================
 # LOAD STT MODEL (Speech → Text)
 # ================================
+=======
+CORS(app) 
+
+# LOAD STT MODEL (Speech → Text)
+>>>>>>> Stashed changes
 
 MODEL_ID = "ai4bharat/indicwav2vec-hindi"
 
@@ -28,11 +34,14 @@ model.eval()
 
 print("Model loaded successfully\n")
 
+<<<<<<< Updated upstream
 
 # =================================
 # TEXT → SPEECH (TTS)
 # =================================
 
+=======
+>>>>>>> Stashed changes
 def text_to_speech(text):
     filename = f"tts_{uuid.uuid4()}.mp3"
 
@@ -53,8 +62,11 @@ def tts():
     audio_file = text_to_speech(text)
 
     response = send_file(audio_file, mimetype="audio/mpeg")
+<<<<<<< Updated upstream
 
     # Optional: delete file after sending
+=======
+>>>>>>> Stashed changes
     @response.call_on_close
     def cleanup():
         try:
@@ -63,11 +75,14 @@ def tts():
             pass
 
     return response
+<<<<<<< Updated upstream
 
 
 # =================================
 # SPEECH → TEXT (STT)
 # =================================
+=======
+>>>>>>> Stashed changes
 
 @app.route("/stt", methods=["POST"])
 def stt():
@@ -77,11 +92,17 @@ def stt():
 
     file = request.files["file"]
 
+<<<<<<< Updated upstream
     # Save uploaded file (webm/opus)
     input_path = "input_audio.webm"
     file.save(input_path)
 
     # Convert to WAV using ffmpeg
+=======
+    input_path = "input_audio.webm"
+    file.save(input_path)
+
+>>>>>>> Stashed changes
     output_path = "converted_audio.wav"
 
     import subprocess
@@ -95,7 +116,10 @@ def stt():
         output_path
     ])
 
+<<<<<<< Updated upstream
     # Load converted audio
+=======
+>>>>>>> Stashed changes
     speech, sr = librosa.load(output_path, sr=16000)
 
     inputs = processor(
@@ -111,13 +135,17 @@ def stt():
 
     predicted_ids = torch.argmax(logits, dim=-1)
     text = processor.decode(predicted_ids[0])
+<<<<<<< Updated upstream
 
     # Cleanup
+=======
+>>>>>>> Stashed changes
     os.remove(input_path)
     os.remove(output_path)
 
     return jsonify({"text": text})
 
+<<<<<<< Updated upstream
 # =================================
 # ROOT ROUTE (Health Check)
 # =================================
@@ -130,6 +158,11 @@ def home():
 # =================================
 # RUN SERVER
 # =================================
+=======
+@app.route("/")
+def home():
+    return "Speech Server Running "
+>>>>>>> Stashed changes
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
