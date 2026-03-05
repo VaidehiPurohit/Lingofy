@@ -14,6 +14,9 @@ CORS(app)  # 🔥 Allow React (localhost:5173) to access API
 # ================================
 # LOAD STT MODEL (Speech → Text)
 # ================================
+CORS(app) 
+
+# LOAD STT MODEL (Speech → Text)
 
 MODEL_ID = "ai4bharat/indicwav2vec-hindi"
 
@@ -82,6 +85,9 @@ def stt():
     file.save(input_path)
 
     # Convert to WAV using ffmpeg
+    input_path = "input_audio.webm"
+    file.save(input_path)
+
     output_path = "converted_audio.wav"
 
     import subprocess
@@ -130,6 +136,9 @@ def home():
 # =================================
 # RUN SERVER
 # =================================
+@app.route("/")
+def home():
+    return "Speech Server Running "
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

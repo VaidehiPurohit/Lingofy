@@ -1,0 +1,121 @@
+{
+    "scene": "shopping",
+    "ui": {
+        "title": "Shopping Mall",
+        "description": "Buy clothes and ask for prices",
+        "level": "Beginner",
+        "turns": 10,
+        "gradient": "from-pink-500 to-rose-500",
+        "icon": "ShoppingCart"
+    },
+    "intents": {
+        "greeting": [
+            "hello",
+            "hi",
+            "hey",
+            "namaste",
+            "namaskar",
+            "नमस्ते",
+            "नमस्कार",
+            "हेलो"
+        ],
+        "confirmation_yes": [
+            "yes",
+            "ok",
+            "yep",
+            "confirm",
+            "haan",
+            "जी हाँ",
+            "theek hai"
+        ],
+        "confirmation_no": [
+            "no",
+            "cancel",
+            "nahi",
+            "नहीं"
+        ],
+        "payment": [
+            "pay",
+            "upi",
+            "cash",
+            "card",
+            "paisa",
+            "dena",
+            "bill",
+            "card chalega"
+        ],
+        "closing": [
+            "thanks",
+            "thank you",
+            "धन्यवाद",
+            "bye",
+            "shukriya"
+        ]
+    },
+    "slots": [
+        "greet",
+        "item",
+        "size",
+        "payment_method"
+    ],
+    "goal_labels": {
+        "greet": "Greet the clerk",
+        "item": "Pick an item (Shirt/Jeans)",
+        "size": "Select size (S/M/L)",
+        "payment_method": "Mention payment"
+    },
+    "prompts": {
+        "item": "आप क्या खरीदना चाहेंगे? शर्ट या जींस?",
+        "size": "आपको कौन सा साइज चाहिए? छोटा, मीडियम या बड़ा?",
+        "payment_method": "आप भुगतान कैसे करेंगे? कार्ड या कैश?"
+    },
+    "templates": {
+        "confirmation": "ठीक है! एक {size} {item} तैयार है। क्या आप ये लेना चाहेंगे?",
+        "ask_payment": "धन्यवाद! कृपया भुगतान करें।",
+        "order_reset": "कोई बात नहीं। आप फिर से बता सकते हैं।",
+        "confirm_failed": "कृपया हाँ या ना में उत्तर दें।",
+        "payment_failed": "कृपया भुगतान पूरा करें।",
+        "closing": "बहुत बढ़िया! आपकी खरीदारी पूरी हुई। आपका दिन शुभ हो!"
+    },
+    "slot_values": {
+        "item": {
+            "shirt": [
+                "shirt",
+                "शर्ट"
+            ],
+            "jeans": [
+                "jeans",
+                "जींस",
+                "pant"
+            ]
+        },
+        "size": {
+            "small": [
+                "small",
+                "S",
+                "छोटा"
+            ],
+            "medium": [
+                "medium",
+                "M",
+                "मीडियम"
+            ],
+            "large": [
+                "large",
+                "L",
+                "बड़ा"
+            ]
+        },
+        "payment_method": {
+            "card": [
+                "card",
+                "कार्ड"
+            ],
+            "cash": [
+                "cash",
+                "कैश",
+                "नकद"
+            ]
+        }
+    }
+}

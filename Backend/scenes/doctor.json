@@ -1,0 +1,132 @@
+{
+    "scene": "doctor",
+    "ui": {
+        "title": "Doctor's Visit",
+        "description": "Discuss symptoms and medical concerns",
+        "level": "Advanced",
+        "turns": 15,
+        "gradient": "from-red-500 to-rose-600",
+        "icon": "Stethoscope"
+    },
+    "intents": {
+        "greeting": [
+            "hello",
+            "hi",
+            "hey",
+            "namaste",
+            "नमस्ते",
+            "namaskar"
+        ],
+        "confirmation_yes": [
+            "yes",
+            "ok",
+            "confirm",
+            "theek hai",
+            "haan",
+            "ji haan",
+            "sahi hai",
+            "bilkul"
+        ],
+        "confirmation_no": [
+            "no",
+            "cancel",
+            "nahi",
+            "galat",
+            "wrong"
+        ],
+        "payment": [
+            "pay",
+            "card",
+            "cash",
+            "upi",
+            "insurance"
+        ],
+        "closing": [
+            "thanks",
+            "bye",
+            "shukriya"
+        ]
+    },
+    "slots": [
+        "greet",
+        "symptoms",
+        "duration",
+        "appointment_type"
+    ],
+    "goal_labels": {
+        "greet": "Greet the Doctor",
+        "symptoms": "Describe Symptoms",
+        "duration": "Mention Duration",
+        "appointment_type": "Check-up or Urgent?"
+    },
+    "prompts": {
+        "symptoms": "आपको क्या तकलीफ है? (जैसे: बुखार, जुखाम, सिर दर्द)",
+        "duration": "यह तकलीफ कितने दिनों से है?",
+        "appointment_type": "क्या यह रूटीन चेकअप (Routine) है या इमरजेंसी (Emergency)?"
+    },
+    "templates": {
+        "confirmation": "ठीक है। आपको {symptoms} है जो {duration} दिनों से है और ये {appointment_type} केस है। क्या ये सही है?",
+        "ask_payment": "धन्यवाद। कंसल्टेशन फीस के लिए कृपया भुगतान करें।",
+        "order_reset": "कोई बात नहीं, कृपया फिर से अपनी तकलीफ बताएं।",
+        "confirm_failed": "क्या आप कन्फर्म करते हैं? हाँ या ना।",
+        "payment_failed": "कृपया भुगतान पूरा करें।",
+        "closing": "दवाइयां और प्रिस्क्रिप्शन काउंटर से ले लें। आपका स्वास्थ्य जल्दी ठीक हो!"
+    },
+    "slot_values": {
+        "symptoms": {
+            "fever": [
+                "fever",
+                "bukhaar",
+                "bukhar",
+                "बुखार",
+                "tap"
+            ],
+            "headache": [
+                "headache",
+                "sir dard",
+                "sir me dard",
+                "सिर दर्द"
+            ],
+            "cough": [
+                "cough",
+                "khansi",
+                "खांसी",
+                "jukham"
+            ]
+        },
+        "duration": {
+            "two_days": [
+                "two days",
+                "2 days",
+                "do din",
+                "2 din",
+                "दो दिन"
+            ],
+            "one_week": [
+                "one week",
+                "1 week",
+                "ek hafta",
+                "एक हफ्ता"
+            ],
+            "since_morning": [
+                "since morning",
+                "aaj subah se",
+                "आज सुबह से"
+            ]
+        },
+        "appointment_type": {
+            "routine": [
+                "routine",
+                "checkup",
+                "रूटीन",
+                "चेकअप"
+            ],
+            "emergency": [
+                "emergency",
+                "urgent",
+                "इमरजेंसी",
+                "अर्जेन्ट"
+            ]
+        }
+    }
+}

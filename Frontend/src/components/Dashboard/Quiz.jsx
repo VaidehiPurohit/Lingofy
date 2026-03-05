@@ -23,10 +23,10 @@ const Quiz = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { 
+  const {
     questions,
     currentQuestionIndex,
-    isQuizCompleted 
+    isQuizCompleted
   } = useSelector((state) => state.quiz);
 
   /* ✅ Load 12 random questions */
@@ -48,6 +48,7 @@ const Quiz = () => {
   return (
     <div className="max-w-5xl mx-auto px-4 space-y-8">
 
+      {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-800">Daily Quiz</h1>
@@ -56,6 +57,7 @@ const Quiz = () => {
         <Timer />
       </div>
 
+      {/* Progress */}
       <div className="mb-8">
         <ProgressBar
           current={currentQuestionIndex + 1}
@@ -63,7 +65,9 @@ const Quiz = () => {
         />
       </div>
 
+      {/* Questions */}
       <Questions />
+
     </div>
   );
 };

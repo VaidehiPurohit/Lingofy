@@ -16,15 +16,14 @@ const SceneCard = ({
 
   return (
     <div
-     onClick={onClick}
+      onClick={onClick}
       className={`
-        w-full rounded-2xl border
+        w-full rounded-2xl border cursor-pointer
         transition-all duration-200
         hover:-translate-y-1 hover:shadow-md
-        ${
-          isCompleted
-            ? "bg-indigo-50 border-indigo-400"
-            : "bg-white border-gray-200"
+        ${isCompleted
+          ? "bg-indigo-50 border-indigo-400"
+          : "bg-white border-gray-200"
         }
         ${hoverBorder}
       `}
@@ -55,10 +54,9 @@ const SceneCard = ({
         <span
           className={`
             px-3 py-1 rounded-full font-medium
-            ${
-              level === "Beginner"
-                ? "bg-emerald-100 text-emerald-700"
-                : level === "Intermediate"
+            ${level === "Beginner"
+              ? "bg-emerald-100 text-emerald-700"
+              : level === "Intermediate"
                 ? "bg-amber-100 text-amber-700"
                 : "bg-rose-100 text-rose-700"
             }

@@ -43,6 +43,7 @@ const SpeakingPractice = ({ data }) => {
   // =========================
   // 🔊 TTS — PLAY REFERENCE
   // =========================
+
   const playReferenceAudio = async () => {
     try {
       const response = await fetch("http://localhost:5000/tts", {
@@ -68,7 +69,7 @@ const SpeakingPractice = ({ data }) => {
   // 🎤 START / STOP RECORDING
   // =========================
   const handleMicClick = async () => {
-    // START RECORDING
+
     if (!isRecording && !isComplete) {
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
@@ -94,6 +95,7 @@ const SpeakingPractice = ({ data }) => {
     }
 
     // STOP RECORDING
+
     else if (isRecording) {
       mediaRecorderRef.current.stop();
 
@@ -247,16 +249,13 @@ const SpeakingPractice = ({ data }) => {
           <div className="flex flex-col items-center space-y-4">
             <button
               onClick={handleMicClick}
-              className={`w-24 h-24 rounded-full text-white flex items-center justify-center shadow-lg transition
-              ${
-                isRecording
-                  ? "bg-red-500 hover:bg-red-600"
-                  : "bg-rose-500 hover:bg-rose-600"
-              }`}
+              className={`w-24 h-24 rounded-full text-white flex items-center justify-center shadow-lg transition ${isRecording
+                ? "bg-red-500 hover:bg-red-600"
+                : "bg-rose-500 hover:bg-rose-600"
+                }`}
             >
               <Mic size={32} />
             </button>
-
             {isRecording ? (
               <>
                 <p className="text-gray-800 font-medium">Recording...</p>

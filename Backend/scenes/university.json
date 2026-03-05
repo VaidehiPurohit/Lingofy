@@ -1,0 +1,106 @@
+{
+    "scene": "university",
+    "ui": {
+        "title": "University Life",
+        "description": "Practice academic conversations",
+        "level": "Intermediate",
+        "turns": 10,
+        "gradient": "from-emerald-500 to-teal-600",
+        "icon": "Building"
+    },
+    "intents": {
+        "greeting": [
+            "hello",
+            "hi",
+            "hey",
+            "namaste",
+            "नमस्ते"
+        ],
+        "confirmation_yes": [
+            "yes",
+            "ok",
+            "haan",
+            "theek hai"
+        ],
+        "confirmation_no": [
+            "no",
+            "cancel",
+            "nahi"
+        ],
+        "payment": [
+            "pay",
+            "fees",
+            "bill"
+        ],
+        "closing": [
+            "thanks",
+            "bye",
+            "shukriya"
+        ]
+    },
+    "slots": [
+        "greet",
+        "query",
+        "department",
+        "confirmation"
+    ],
+    "goal_labels": {
+        "greet": "Greet the Admin",
+        "query": "Mention Query",
+        "department": "Pick Department",
+        "confirmation": "Confirm Session"
+    },
+    "prompts": {
+        "query": "आप किस बारे में पूछना चाहते हैं? (जैसे: एडमिशन, फीस, टाइमटेबल)",
+        "department": "आपका विभाग कौनसा है? (जैसे: साइंस, कॉमर्स, आर्ट्स)",
+        "confirmation": "क्या आप ये जानकारी कन्फर्म करते हैं?"
+    },
+    "templates": {
+        "confirmation": "ठीक है! {department} विभाग के {query} के बारे में जानकारी। क्या आप कन्फर्म हैं?",
+        "ask_payment": "धन्यवाद! कृपया रजिस्ट्रेशन फीस का भुगतान करें।",
+        "order_reset": "कोई बात नहीं, फिर से बताइये।",
+        "confirm_failed": "हाँ या ना में उत्तर दें।",
+        "payment_failed": "भुगतान करें।",
+        "closing": "आपकी सहायता करके खुशी हुई! आपका दिन शुभ हो।"
+    },
+    "slot_values": {
+        "query": {
+            "admission": [
+                "admission",
+                "एडमिशन",
+                "दाखिला"
+            ],
+            "fees": [
+                "fees",
+                "फीस",
+                "paisa"
+            ],
+            "timetable": [
+                "timetable",
+                "schedule",
+                "समय सारिणी"
+            ]
+        },
+        "department": {
+            "science": [
+                "science",
+                "विज्ञान"
+            ],
+            "commerce": [
+                "commerce",
+                "कॉमर्स"
+            ],
+            "arts": [
+                "arts",
+                "आर्ट्स"
+            ]
+        },
+        "confirmation": {
+            "yes": [
+                "yes",
+                "haan",
+                "yep"
+            ]
+        }
+    }
+}

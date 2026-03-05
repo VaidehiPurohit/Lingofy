@@ -4,28 +4,28 @@ import {
   Home,
   BookOpen,
   MessageSquare,
-  Hash,
   Trophy,
   TrendingUp,
   User,
-  Sparkles,
-  SpellCheck ,
-} from 'lucide-react'
+  SpellCheck,
+  Hash,
+  Sparkles
+} from "lucide-react";
 
 const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const sidebarRef = useRef(null)
 
   const menuItems = [
     { name: 'Home', href: 'home', icon: Home },
-    { name: 'Alphabets', href: 'alphabets', icon: SpellCheck  },
+    { name: 'Alphabets', href: 'alphabets', icon: SpellCheck },
     { name: 'Lessons', href: 'lessons', icon: BookOpen },
     { name: 'Scenes', href: 'scenes', icon: MessageSquare },
     { name: 'Slang', href: 'slang', icon: Hash },
     { name: 'Quiz', href: 'quiz', icon: Trophy },
     { name: 'Progress', href: 'progress', icon: TrendingUp },
-    { name: 'Recommendations', href:'recommendation',icon: Sparkles},
+    { name: 'Recommendations', href: 'recommendation', icon: Sparkles },
     { name: 'Profile', href: 'profile', icon: User },
-    
+
   ]
 
   useEffect(() => {
@@ -55,10 +55,9 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             end
             className={({ isActive }) =>
               `flex items-center gap-3 px-4 py-2.5 rounded-xl text-lg font-medium transition
-              ${
-                isActive
-                  ? 'bg-indigo-50 text-indigo-700'
-                  : 'text-gray-700 hover:bg-gray-100'
+              ${isActive
+                ? 'bg-indigo-50 text-indigo-700'
+                : 'text-gray-700 hover:bg-gray-100'
               }`
             }
           >
