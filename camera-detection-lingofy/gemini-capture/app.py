@@ -4,11 +4,6 @@ import base64, json, re, requests, os
 
 app = Flask(__name__, static_folder='static')
 CORS(app)
-
-# ── Paste your Gemini API key here OR set env variable GEMINI_API_KEY ─────────
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "AIzaSyD2Y3cvNtPBhw3k_OgwnxvXSVT2djkW3qE")
-GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2-flash:generateContent?key={GEMINI_API_KEY}"
-
 # ── Prompt ────────────────────────────────────────────────────────────────────
 PROMPT = """You are an object detection system. Analyze this image and identify every distinct visible object.
 
