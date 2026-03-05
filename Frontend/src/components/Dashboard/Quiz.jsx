@@ -7,10 +7,7 @@ import ProgressBar from '../../Quiz/ProgressBar';
 import Questions from '../../Quiz/Questions';
 import Timer from '../../Quiz/Timer';
 
-<<<<<<< Updated upstream
 /* ✅ Proper Fisher-Yates Shuffle */
-=======
->>>>>>> Stashed changes
 const getRandomQuestions = (questions, count) => {
   const shuffled = [...questions];
 
@@ -32,20 +29,14 @@ const Quiz = () => {
     isQuizCompleted
   } = useSelector((state) => state.quiz);
 
-<<<<<<< Updated upstream
   /* ✅ Load 12 random questions */
-=======
->>>>>>> Stashed changes
   useEffect(() => {
     const randomQuestions = getRandomQuestions(sampleQuestions, 12);
     dispatch(setQuestions(randomQuestions));
     dispatch(startQuiz());
   }, [dispatch]);
 
-<<<<<<< Updated upstream
   /* ✅ Redirect on completion (unchanged) */
-=======
->>>>>>> Stashed changes
   useEffect(() => {
     if (isQuizCompleted) {
       navigate('/dashboard/quiz/results');
@@ -57,10 +48,7 @@ const Quiz = () => {
   return (
     <div className="max-w-5xl mx-auto px-4 space-y-8">
 
-<<<<<<< Updated upstream
-=======
       {/* Header */}
->>>>>>> Stashed changes
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-800">Daily Quiz</h1>
@@ -69,10 +57,7 @@ const Quiz = () => {
         <Timer />
       </div>
 
-<<<<<<< Updated upstream
-=======
       {/* Progress */}
->>>>>>> Stashed changes
       <div className="mb-8">
         <ProgressBar
           current={currentQuestionIndex + 1}
@@ -80,15 +65,10 @@ const Quiz = () => {
         />
       </div>
 
-<<<<<<< Updated upstream
+      {/* Questions */}
       <Questions />
-    </div>
-=======
-      {/* Questions ONLY */}
-      <Questions />
-    </div>
 
->>>>>>> Stashed changes
+    </div>
   );
 };
 

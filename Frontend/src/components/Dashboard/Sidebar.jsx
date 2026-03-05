@@ -4,28 +4,20 @@ import {
   Home,
   BookOpen,
   MessageSquare,
-  Hash,
   Trophy,
   TrendingUp,
   User,
-  Sparkles,
-<<<<<<< Updated upstream
-  SpellCheck ,
-=======
   SpellCheck,
->>>>>>> Stashed changes
-} from 'lucide-react'
+  Hash,
+  Sparkles
+} from "lucide-react";
 
 const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const sidebarRef = useRef(null)
 
   const menuItems = [
     { name: 'Home', href: 'home', icon: Home },
-<<<<<<< Updated upstream
-    { name: 'Alphabets', href: 'alphabets', icon: SpellCheck  },
-=======
     { name: 'Alphabets', href: 'alphabets', icon: SpellCheck },
->>>>>>> Stashed changes
     { name: 'Lessons', href: 'lessons', icon: BookOpen },
     { name: 'Scenes', href: 'scenes', icon: MessageSquare },
     { name: 'Slang', href: 'slang', icon: Hash },

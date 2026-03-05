@@ -25,12 +25,9 @@ const SpeakingPractice = ({ data }) => {
 
   const currentWord = data[currentIndex];
 
-<<<<<<< Updated upstream
   // =========================
   // TIMER
   // =========================
-=======
->>>>>>> Stashed changes
   useEffect(() => {
     let interval;
 
@@ -43,13 +40,10 @@ const SpeakingPractice = ({ data }) => {
     return () => clearInterval(interval);
   }, [isRecording]);
 
-<<<<<<< Updated upstream
   // =========================
   // 🔊 TTS — PLAY REFERENCE
   // =========================
-=======
 
->>>>>>> Stashed changes
   const playReferenceAudio = async () => {
     try {
       const response = await fetch("http://localhost:5000/tts", {
@@ -71,16 +65,11 @@ const SpeakingPractice = ({ data }) => {
     }
   };
 
-<<<<<<< Updated upstream
   // =========================
   // 🎤 START / STOP RECORDING
   // =========================
   const handleMicClick = async () => {
-    // START RECORDING
-=======
-  const handleMicClick = async () => {
 
->>>>>>> Stashed changes
     if (!isRecording && !isComplete) {
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
@@ -105,11 +94,8 @@ const SpeakingPractice = ({ data }) => {
       setSeconds(0);
     }
 
-<<<<<<< Updated upstream
     // STOP RECORDING
-=======
 
->>>>>>> Stashed changes
     else if (isRecording) {
       mediaRecorderRef.current.stop();
 
@@ -118,12 +104,9 @@ const SpeakingPractice = ({ data }) => {
     }
   };
 
-<<<<<<< Updated upstream
   // =========================
   // 📡 SEND AUDIO → STT API
   // =========================
-=======
->>>>>>> Stashed changes
   const sendAudio = async () => {
     try {
       const audioBlob = new Blob(audioChunksRef.current);
@@ -155,12 +138,9 @@ const SpeakingPractice = ({ data }) => {
     }
   };
 
-<<<<<<< Updated upstream
   // =========================
   // OTHER HANDLERS
   // =========================
-=======
->>>>>>> Stashed changes
   const handleRetry = () => {
     setIsComplete(false);
     setSeconds(0);
@@ -189,13 +169,10 @@ const SpeakingPractice = ({ data }) => {
   const progress = ((currentIndex + 1) / data.length) * 100;
 
   if (!currentWord) return null;
-<<<<<<< Updated upstream
 
   // =========================
   // UI
   // =========================
-=======
->>>>>>> Stashed changes
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-8">
 
@@ -272,23 +249,13 @@ const SpeakingPractice = ({ data }) => {
           <div className="flex flex-col items-center space-y-4">
             <button
               onClick={handleMicClick}
-              className={`w-24 h-24 rounded-full text-white flex items-center justify-center shadow-lg transition
-<<<<<<< Updated upstream
-              ${
-                isRecording
-                  ? "bg-red-500 hover:bg-red-600"
-                  : "bg-rose-500 hover:bg-rose-600"
-              }`}
-=======
-              ${isRecording
-                  ? "bg-red-500 hover:bg-red-600"
-                  : "bg-rose-500 hover:bg-rose-600"
+              className={`w-24 h-24 rounded-full text-white flex items-center justify-center shadow-lg transition ${isRecording
+                ? "bg-red-500 hover:bg-red-600"
+                : "bg-rose-500 hover:bg-rose-600"
                 }`}
->>>>>>> Stashed changes
             >
               <Mic size={32} />
             </button>
-
             {isRecording ? (
               <>
                 <p className="text-gray-800 font-medium">Recording...</p>

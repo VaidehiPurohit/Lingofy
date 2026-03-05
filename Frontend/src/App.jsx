@@ -15,12 +15,7 @@ import PEstructure from './components/Slangs/PopularExpression/PEstructure'
 import CGstructure from './components/Slangs/CasualGreeting/CGStructure'
 import YSstructure from './components/Slangs/YouthSlang/YSstructure'
 import SSstructure from './components/Slangs/SocialSlang/SSstructure'
-import RestaurantPage from './components/Scenes/Restaurant/RestaurantPage'
-import ShoppingPage from './components/Scenes/Shopping/ShoppingPage'
-import AirPortPage from './components/Scenes/Airport/AirPortPage'
-import UniversityPage from './components/Scenes/University/UniversityPage'
-import InterviewPage from './components/Scenes/Interview/InterviewPage'
-import DoctorPage from './components/Scenes/Doctor/DoctorPage'
+import GenericScenePage from "./components/Scenes/GenericScenePage";
 import PopStructure from './components/Slangs/PopSlang/PopStructure'
 import ReactStructure from './components/Slangs/Reactions/ReactStructure'
 import Results from './Quiz/Results'
@@ -80,12 +75,7 @@ const App = () => {
         <Route path="scenes" element={<Scenes />} />
 
         {/* Scenes */}
-        <Route path="scenes/restaurant" element={<RestaurantPage />} />
-        <Route path="scenes/shopping" element={<ShoppingPage />} />
-        <Route path="scenes/airport" element={<AirPortPage />} />
-        <Route path="scenes/university" element={<UniversityPage />} />
-        <Route path="scenes/interview" element={<InterviewPage />} />
-        <Route path="scenes/doctor-appointment" element={<DoctorPage />} />
+        <Route path="scenes/:sceneId" element={<GenericScenePage />} />
 
         {/* Quiz */}
         <Route path="quiz" element={<Quiz />} />
