@@ -36,6 +36,14 @@ def handle_message(user_id, text, scene):
     # 3. Identify NEWLY filled slots (for LLM to acknowledge later)
     newly_filled = [s for s in entities if pre_slots.get(s) is None]
     
+    # --- HYBRID LLM FALLBACK CHECK ---
+    # If the user's message didn't trigger any meaningful scene progress
+    is_off_script = not is_init_message and not newly_filled and intent not in ("greeting", "confirmation_yes", "confirmation_no", "payment", "closing")
+    
+    if is_off_script:
+        from scene_engine.hybrid_llm import generate_fallback_response
+        return generate_fallback_response(text, scene, state)
+    
     # 4. Build Response Logic
     prefix = ""
     if intent == "greeting" and pre_slots.get("greet") is None:
@@ -62,14 +70,35 @@ def handle_message(user_id, text, scene):
                 return prefix + scene["prompts"][slot]
 
         # Everything filled!
+        # Check if we should skip confirmation
+        if "confirmation" not in scene.get("templates", {}):
+            # No confirmation template? Maybe skip to payment or completion
+            if "ask_payment" in scene.get("templates", {}):
+                state["status"] = "paying"
+                return prefix + scene["templates"]["ask_payment"]
+            else:
+                state["status"] = "completed"
+                return prefix + scene["templates"]["closing"]
+        
         state["status"] = "confirming"
-        return prefix + scene["templates"]["confirmation"].format(**slots)
+        # Safely format strings - only use slots that are in the template
+        import re
+        template = scene["templates"]["confirmation"]
+        keys = re.findall(r'\{(.*?)\}', template)
+        format_data = {k: slots.get(k, "") for k in keys}
+        return prefix + template.format(**format_data)
 
     # --- PHASE: Confirmation ---
     if state["status"] == "confirming":
         if intent == "confirmation_yes":
-            state["status"] = "paying"
-            return scene["templates"]["ask_payment"]
+            # Check if we should skip payment
+            if "ask_payment" in scene.get("templates", {}):
+                state["status"] = "paying"
+                return scene["templates"]["ask_payment"]
+            else:
+                state["status"] = "completed"
+                return scene["templates"]["closing"]
+                
         elif intent == "confirmation_no" or intent == "payment": # Allow jump to payment if they insist
              if intent == "confirmation_no":
                 for s in scene["slots"]:
@@ -77,10 +106,15 @@ def handle_message(user_id, text, scene):
                 state["status"] = "ordering"
                 return scene["templates"]["order_reset"]
              else:
-                state["status"] = "paying"
-                return scene["templates"]["ask_payment"]
+                # User jumped to payment? Only if template exists
+                if "ask_payment" in scene.get("templates", {}):
+                    state["status"] = "paying"
+                    return scene["templates"]["ask_payment"]
+                else:
+                    state["status"] = "completed"
+                    return scene["templates"]["closing"]
         else:
-            return scene["templates"]["confirm_failed"]
+            return scene.get("templates", {}).get("confirm_failed", "Please confirm with yes or no.")
 
     # --- PHASE: Payment ---
     if state["status"] == "paying":
@@ -88,10 +122,10 @@ def handle_message(user_id, text, scene):
             state["status"] = "completed"
             return scene["templates"]["closing"]
         else:
-            return scene["templates"]["payment_failed"]
+            return scene.get("templates", {}).get("payment_failed", "Please complete the payment.")
 
     # --- PHASE: Completed ---
     if state["status"] == "completed":
-        return scene["templates"]["closing"]
+        return scene.get("templates", {}).get("closing", "Done!")
 
-    return "माफ़ कीजिए, मैं समझ नहीं पाया। आप क्या लेना चाहेंगे?"
+    return "माफ़ कीजिए, मैं समझ नहीं पाया।"
