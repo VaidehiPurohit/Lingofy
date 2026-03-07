@@ -21,7 +21,7 @@ def detect_intent(text, scene):
                 best_intent = intent
 
     # Only return the intent if it's a strong match (70% or higher)
-    if highest_score > 0.7:
+    if highest_score > 0.6:
         return best_intent
         
     return None

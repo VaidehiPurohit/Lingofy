@@ -1016,7 +1016,7 @@
 
     <script>
         // ── Config ────────────────────────────────────────────────────
-        const BACKEND = "http://localhost:5000"; // Change to ngrok URL for Colab
+        const BACKEND = "http://localhost:5001"; // Port updated to avoid conflict
 
         // ── State ─────────────────────────────────────────────────────
         let stream = null;
@@ -1082,7 +1082,7 @@
             const base64 = canvas.toDataURL("image/jpeg", 0.92);
 
             try {
-                const res = await fetch('http://192.168.0.102:5000/api/detect', {
+                const res = await fetch(`${BACKEND}/api/detect`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ image: base64 })
@@ -1265,7 +1265,7 @@
           🔊 Play Hindi Pronunciation
         </button>
       ` : ""}
-      <button class="btn-save" id="saveBtn" onclick="saveWord(this, ${JSON.stringify(JSON.stringify(word))})">
+      <button class="btn-save" id="saveBtn" onclick='saveWord(this, ${JSON.stringify(word).replace(/'/g, "&apos;")})'>
         ＋ Save to My Vocabulary
       </button>
     `;
