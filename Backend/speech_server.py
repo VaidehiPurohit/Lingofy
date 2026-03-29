@@ -1,49 +1,26 @@
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from gtts import gTTS
-import torch
-import librosa
-from transformers import Wav2Vec2Processor, Wav2Vec2ForCTC
 import uuid
 import os
+import requests
+import subprocess
 
 app = Flask(__name__)
 CORS(app)  # 🔥 Allow React (localhost:5173) to access API
 
-
-# ================================
-# LOAD STT MODEL (Speech → Text)
-# ================================
-CORS(app) 
-
-# LOAD STT MODEL (Speech → Text)
-
-MODEL_ID = "ai4bharat/indicwav2vec-hindi"
-
-print("Loading AI4Bharat Hindi model...")
-
-processor = Wav2Vec2Processor.from_pretrained(MODEL_ID)
-model = Wav2Vec2ForCTC.from_pretrained(MODEL_ID)
-
-device = "cuda" if torch.cuda.is_available() else "cpu"
-model = model.to(device)
-model.eval()
-
-print("Model loaded successfully\n")
+# This securely targets your new Hugging Face Server
+HF_SPACE_URL = "https://vai2719-lingofy-speech.hf.space/stt"
 
 
 # =================================
-# TEXT → SPEECH (TTS)
+# TEXT → SPEECH (TTS) (Runs Locally)
 # =================================
-
 def text_to_speech(text):
     filename = f"tts_{uuid.uuid4()}.mp3"
-
     tts = gTTS(text=text, lang="hi")
     tts.save(filename)
-
     return filename
-
 
 @app.route("/tts", methods=["POST"])
 def tts():
@@ -54,10 +31,8 @@ def tts():
         return jsonify({"error": "No text provided"}), 400
 
     audio_file = text_to_speech(text)
-
     response = send_file(audio_file, mimetype="audio/mpeg")
 
-    # Optional: delete file after sending
     @response.call_on_close
     def cleanup():
         try:
@@ -69,76 +44,63 @@ def tts():
 
 
 # =================================
-# SPEECH → TEXT (STT)
+# SPEECH → TEXT (STT) (Forwarded to Cloud API)
 # =================================
-
 @app.route("/stt", methods=["POST"])
 def stt():
-
     if "file" not in request.files:
         return jsonify({"error": "No audio file"}), 400
 
     file = request.files["file"]
 
-    # Save uploaded file (webm/opus)
+    # Save uploaded file
     input_path = "input_audio.webm"
     file.save(input_path)
 
-    # Convert to WAV using ffmpeg
-    input_path = "input_audio.webm"
-    file.save(input_path)
-
+    # Convert to WAV for local feedback engine
     output_path = "converted_audio.wav"
+    subprocess.run(["ffmpeg", "-y", "-i", input_path, "-ar", "16000", "-ac", "1", output_path], check=False)
 
-    import subprocess
+    try:
+        # Offload exactly 99% of CPU usage: Forward audio to your NEW Cloud Server
+        with open(input_path, "rb") as f:
+            files_to_send = {'file': ('input.webm', f, 'audio/webm')}
+            hf_response = requests.post(HF_SPACE_URL, files=files_to_send, timeout=120)
 
-    subprocess.run([
-        "ffmpeg",
-        "-y",
-        "-i", input_path,
-        "-ar", "16000",
-        "-ac", "1",
-        output_path
-    ])
+        hf_data = hf_response.json()
+        transcribed_text = hf_data.get("text", "")
+    except Exception as e:
+        print(f"Error accessing Hugging Face Cloud Server: {e}")
+        transcribed_text = "Error connecting to cloud server."
 
-    # Load converted audio
-    speech, sr = librosa.load(output_path, sr=16000)
+    # --- GET AUDIO FEEDBACK (Local) ---
+    scene_name = request.form.get("scene", "Unknown Scene")
+    
+    import sys
+    sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+    try:
+        from scene_engine.audio_feedback_engine import generate_audio_feedback
+        audio_feedback = generate_audio_feedback(output_path, scene_name)
+    except Exception as e:
+        print(f"Error loading audio feedback engine: {e}")
+        audio_feedback = None
 
-    inputs = processor(
-        speech,
-        sampling_rate=16000,
-        return_tensors="pt"
-    )
+    # Cleanup Local Drive
+    try:
+        os.remove(input_path)
+        os.remove(output_path)
+    except:
+        pass
 
-    inputs = {k: v.to(device) for k, v in inputs.items()}
+    return jsonify({"text": transcribed_text, "audio_feedback": audio_feedback})
 
-    with torch.no_grad():
-        logits = model(**inputs).logits
-
-    predicted_ids = torch.argmax(logits, dim=-1)
-    text = processor.decode(predicted_ids[0])
-
-    # Cleanup
-    os.remove(input_path)
-    os.remove(output_path)
-
-    return jsonify({"text": text})
 
 # =================================
 # ROOT ROUTE (Health Check)
 # =================================
-
 @app.route("/")
 def home():
-    return "Speech Server Running 🚀"
-
-
-# =================================
-# RUN SERVER
-# =================================
-@app.route("/")
-def home():
-    return "Speech Server Running "
+    return "Hybrid Cloud Speech Proxy Running 🚀"
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

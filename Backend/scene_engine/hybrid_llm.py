@@ -1,43 +1,50 @@
 import os
 import requests
+import time
 
-# We use Gemini for the hybrid fallback responses
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "AIzaSyD2Y3cvNtPBhw3k_OgwnxvXSVT2djkW3qE")
-GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}"
+# ── GEMINI API CONFIGURATION ──────────────────────────────────────────
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "AIzaSyBeNhp6m82kQmfW43w2I5XYnnv8ydroNQM")
+GEMINI_MODEL = "gemini-2.5-flash"
+GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}"
+# ──────────────────────────────────────────────────────────────────────
 
 def generate_fallback_response(user_text, scene, state):
+    """Handle off-script messages with a natural in-character AI response."""
     title = scene.get("ui", {}).get("title", "Scene")
-    description = scene.get("ui", {}).get("description", "")
-    
-    # Identify what slots are still missing so the LLM can steer the user
-    missing_slots = [slot for slot, val in state["slots"].items() if val is None]
-    
-    prompt = f"""You are the central character in a scenario called '{title}'.
-Context: {description}
+    missing = [s for s in state['slots'] if state['slots'].get(s) is None]
 
-The user is practicing their conversation skills. 
-Their current progress (filled slots): {state['slots']}
-Missing information they still need to provide: {missing_slots}
+    prompt = f"""You are acting in a conversation scene: '{title}'.
+Current goal: {missing[0] if missing else 'end the session'}.
 
-The user just said something out of the strict expected flow: "{user_text}"
+User said: "{user_text}"
 
-Your Task:
-1. Act in character and respond to their statement/question naturally in Hindi (or Hinglish if appropriate).
-2. After answering them, gently steer the conversation back to the missing information ({missing_slots[0] if missing_slots else 'tell them they are done'}).
-3. Keep your response short and conversational (1-2 sentences max).
-4. Do not include any quotes, markdown, or metadata in your response. Just the dialogue.
+Respond naturally in Hindi/Hinglish (1 sentence max), then gently guide them back to the goal.
+No quotes, no markdown, just dialogue.
 """
 
     payload = {
         "contents": [{"parts": [{"text": prompt}]}],
-        "generationConfig": {"temperature": 0.7, "maxOutputTokens": 150}
+        "generationConfig": {"temperature": 0.5, "maxOutputTokens": 100}
     }
 
-    try:
-        resp = requests.post(GEMINI_URL, json=payload, timeout=8)
-        resp.raise_for_status()
-        reply = resp.json()['candidates'][0]['content']['parts'][0]['text'].strip()
-        return reply
-    except Exception as e:
-        print(f"LLM Fallback error: {e}")
-        return "माफ़ कीजिए, मैं समझ नहीं पाया। हम क्या बात कर रहे थे?"
+    for attempt in range(2):
+        try:
+            resp = requests.post(GEMINI_URL, json=payload, timeout=10)
+
+            if resp.status_code == 429:
+                print(f"[Hybrid LLM] Rate limited, retrying in 2s...")
+                time.sleep(2)
+                continue
+
+            resp.raise_for_status()
+            reply = resp.json()['candidates'][0]['content']['parts'][0]['text'].strip()
+            return reply
+
+        except Exception as e:
+            print(f"[Hybrid LLM] Error: {e}")
+            if attempt == 0:
+                time.sleep(1)
+                continue
+            return "माफ़ कीजिए, मैं समझ नहीं पाया। हम क्या बात कर रहे थे?"
+
+    return "माफ़ कीजिए, मैं समझ नहीं पाया।"
