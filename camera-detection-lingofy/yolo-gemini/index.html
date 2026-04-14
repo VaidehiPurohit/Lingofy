@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Lingofy Vision</title>
+    <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body>
+
+    <header>
+        <h1>Lingofy Vision</h1>
+    </header>
+
+    <div class="container">
+
+        <!-- Upload -->
+        <input type="file" id="imageInput" accept="image/*" capture="environment" />
+
+        <!-- Canvas -->
+        <div class="canvas-container">
+            <canvas id="canvas"></canvas>
+        </div>
+
+        <!-- Word Card -->
+        <div id="card" class="card hidden"></div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

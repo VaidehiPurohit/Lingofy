@@ -11,15 +11,26 @@ const PhraseDetailCard = ({
   example,
   gradient,
   hoverBorder,
-  audioSrc, 
 }) => {
   const audioRef = useRef(null);
 
-  const handlePlayAudio = () => {
-    if (!audioRef.current) return;
-
-    audioRef.current.currentTime = 0; // restart if clicked again
-    audioRef.current.play();
+  const handlePlayAudio = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/tts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: Hindi || literal })
+      });
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      if (audioRef.current) {
+        audioRef.current.src = url;
+        audioRef.current.currentTime = 0;
+        audioRef.current.play();
+      }
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
@@ -81,8 +92,7 @@ const PhraseDetailCard = ({
         </div>
       </div>
 
-   
-      <audio ref={audioRef} src={audioSrc} preload="auto" />
+      <audio ref={audioRef} preload="auto" />
     </div>
   );
 };

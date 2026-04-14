@@ -14,14 +14,8 @@ HF_SPACE_URL = "https://vai2719-lingofy-speech.hf.space/stt"
 
 
 # =================================
-# TEXT → SPEECH (TTS) (Runs Locally)
+# TEXT → SPEECH (TTS) (Forwarded to Cloud)
 # =================================
-def text_to_speech(text):
-    filename = f"tts_{uuid.uuid4()}.mp3"
-    tts = gTTS(text=text, lang="hi")
-    tts.save(filename)
-    return filename
-
 @app.route("/tts", methods=["POST"])
 def tts():
     data = request.get_json()
@@ -30,17 +24,18 @@ def tts():
     if not text:
         return jsonify({"error": "No text provided"}), 400
 
-    audio_file = text_to_speech(text)
-    response = send_file(audio_file, mimetype="audio/mpeg")
-
-    @response.call_on_close
-    def cleanup():
-        try:
-            os.remove(audio_file)
-        except:
-            pass
-
-    return response
+    try:
+        url = "https://vai2719-lingofy-speech.hf.space/tts"
+        resp = requests.post(url, json={"text": text}, timeout=15)
+        if resp.status_code == 200:
+            import io
+            fp = io.BytesIO(resp.content)
+            return send_file(fp, mimetype="audio/mpeg", download_name="speech.mp3")
+        else:
+            return jsonify({"error": "HF TTS failed"}), 500
+    except Exception as e:
+        print(f"HF TTS Error: {e}")
+        return jsonify({"error": str(e)}), 500
 
 
 # =================================

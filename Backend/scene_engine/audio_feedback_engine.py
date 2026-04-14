@@ -6,17 +6,23 @@ import time
 import base64
 
 # ── GEMINI API CONFIGURATION ──────────────────────────────────────────
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "AIzaSyBeNhp6m82kQmfW43w2I5XYnnv8ydroNQM")
-GEMINI_MODEL = "gemini-2.5-flash"
-GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}"
+# Only read API keys from environment. Hardcoding keys is a security risk.
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+GEMINI_MODEL = "gemini-3.1-flash-lite-preview"
+
+GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}" if GEMINI_API_KEY else None
 # ──────────────────────────────────────────────────────────────────────
 
-def generate_audio_feedback(audio_file_path, scene_title):
-    """Generate lightweight pronunciation feedback from audio using Gemini AI."""
-    
+def generate_audio_feedback(audio_path, scene_title, expected_text=""):
+    """
+    Generate audio feedback by calling Gemini's multimodal audio capacity.
+    """
+    if not GEMINI_URL:
+        return generate_audio_fallback_feedback(scene_title)
+
     # Check file size - skip if too large (reduce API load)
     try:
-        file_size = os.path.getsize(audio_file_path)
+        file_size = os.path.getsize(audio_path)
         if file_size > 1024 * 1024:  # 1MB limit
             print(f"[Audio Feedback] Audio file too large ({file_size} bytes), skipping")
             return {"score": None, "tip": "Audio recorded successfully!", "suggestion": ""}
@@ -25,17 +31,32 @@ def generate_audio_feedback(audio_file_path, scene_title):
     
     # Read and encode the audio file
     try:
-        with open(audio_file_path, "rb") as f:
+        with open(audio_path, "rb") as f:
             audio_data = base64.b64encode(f.read()).decode("utf-8")
     except Exception as e:
         print(f"[Audio Feedback] Could not read audio file: {e}")
         return None
 
-    prompt = f"""You are a Hindi language tutor. Listen to this short audio clip from a student practicing: {scene_title}
+    prompt = f"""You are a professional Hindi pronunciation coach. 
+Analyze this student's audio for scenario: {scene_title}
+EXPECTED WORD/PHRASE: "{expected_text}"
 
-Focus on pronunciation and accent. Give brief, encouraging feedback.
+EVALUATION GOALS:
+1. Determine pronunciation accuracy (0-100) specifically comparing against "{expected_text}".
+2. Identify specific accent issues or vowel/consonant mispronunciations.
+3. If they spoke a completely different word (e.g. "Hello" instead of "Namaste"), penalize accuracy heavily.
+4. Check for natural flow and clarity.
 
-Return ONLY JSON: {{"score": 80, "tip": "One short tip", "suggestion": "Specific improvement"}}"""
+Return ONLY JSON: 
+{{
+  "score": 0-100, 
+  "accuracy_details": "Brief technical note on sounds (e.g. aspirated consonants, vowel length)",
+  "tip": "Actionable pronunciation tip (English)", 
+  "suggestion": "How to say '{expected_text}' perfectly in Hindi script"
+}}"""
+
+    if not GEMINI_URL:
+        return generate_audio_fallback_feedback(scene_title)
 
     payload = {
         "contents": [
@@ -51,17 +72,17 @@ Return ONLY JSON: {{"score": 80, "tip": "One short tip", "suggestion": "Specific
                 ]
             }
         ],
-        "generationConfig": {"temperature": 0.1, "maxOutputTokens": 256}  # Reduced tokens
+        "generationConfig": {"temperature": 0.2, "maxOutputTokens": 256}
     }
 
     # Retry logic if rate-limited
     for attempt in range(2):
         try:
-            resp = requests.post(GEMINI_URL, json=payload, timeout=15)  # Reduced timeout
+            resp = requests.post(GEMINI_URL, json=payload, timeout=12)
             
             if resp.status_code == 429:
                 print(f"[Audio Feedback] Rate limited, retrying in 1s... (attempt {attempt+1})")
-                time.sleep(1)  # Reduced wait time
+                time.sleep(1)
                 continue
             
             resp.raise_for_status()
@@ -72,13 +93,29 @@ Return ONLY JSON: {{"score": 80, "tip": "One short tip", "suggestion": "Specific
             if match:
                 return json.loads(match.group())
             
-            return {"score": None, "tip": "Good attempt at speaking! Keep practicing your accent.", "suggestion": ""}
+            return {"score": None, "tip": f"Good effort in the {scene_title} scenario! Pay attention to your vowels.", "suggestion": ""}
 
         except Exception as e:
             print(f"[Audio Feedback] Error (attempt {attempt+1}): {e}")
             if attempt == 0:
-                time.sleep(0.5)  # Reduced retry delay
+                time.sleep(0.5)
                 continue
-            return None
+            return generate_audio_fallback_feedback(scene_title)
 
-    return None
+    return generate_audio_fallback_feedback(scene_title)
+
+
+def generate_audio_fallback_feedback(scene_title):
+    """Generate fallback audio feedback when API fails."""
+    tips = [
+        f"Good recording! Focus on clear pronunciation in the {scene_title} scenario.",
+        f"Recording received! Try speaking a bit slower for better clarity.",
+        f"Well done! Pay attention to vowel sounds when practicing {scene_title}.",
+        f"Audio captured! Practice with native speakers to improve your accent."
+    ]
+    import random
+    return {
+        "score": None,
+        "tip": random.choice(tips),
+        "suggestion": "Keep practicing your pronunciation regularly!"
+    }
