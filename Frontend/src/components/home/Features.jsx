@@ -95,17 +95,17 @@ const Features = () => {
           </div>
         </div>
 
-        {/* Movies & Books */}
+        {/* Capture and Learn */}
         <div>
           <div className="size-11 p-2 bg-indigo-50 border border-indigo-200 rounded flex items-center justify-center">
             <Film className="size-6 text-indigo-600" />
           </div>
           <div className="mt-5 space-y-2">
             <h3 className="text-base font-medium text-slate-700">
-              Movie & Book Picks
+              Capture and Learn
             </h3>
             <p className="text-sm text-slate-500">
-              Discover movies and books that help you learn naturally.
+              Capture surroundings and learn from real-life contexts.
             </p>
           </div>
         </div>

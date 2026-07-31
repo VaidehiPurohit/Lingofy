@@ -1,7 +1,26 @@
 import json
-from sentence_transformers import SentenceTransformer, util
 
-model = SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")
+# Lazy imports
+_sentence_transformers = None
+_util = None
+
+def _get_sentence_transformers():
+    global _sentence_transformers, _util
+    if _sentence_transformers is None:
+        from sentence_transformers import SentenceTransformer, util
+        _sentence_transformers = SentenceTransformer
+        _util = util
+    return _sentence_transformers, _util
+
+# Lazy load model
+_model = None
+
+def _get_model():
+    global _model
+    if _model is None:
+        SentenceTransformer, util = _get_sentence_transformers()
+        _model = SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")
+    return _model
 
 with open("data/intents.json", encoding="utf-8") as f:
     INTENTS = json.load(f)
@@ -29,6 +48,8 @@ def check_goal(user_input, goal, threshold=0.6):
 
     # Step 2: Semantic similarity
     anchors = INTENTS[goal]
+    model = _get_model()
+    SentenceTransformer, util = _get_sentence_transformers()
 
     user_emb = model.encode(user_input, convert_to_tensor=True)
     anchor_embs = model.encode(anchors, convert_to_tensor=True)

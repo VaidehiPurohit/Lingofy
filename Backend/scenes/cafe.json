@@ -57,6 +57,8 @@
             "reset",
             "nahi",
             "नहीं",
+            "ना",
+            "na",
             "galat",
             "no thanks"
         ],
@@ -78,10 +80,12 @@
         "closing": [
             "thanks",
             "thank you",
+            "shukriya",
+            "शुक्रिया",
             "धन्यवाद",
             "bye",
-            "shukriya",
-            "alvida"
+            "alvida",
+            "bas itna hi"
         ]
     },
     "slots": [
@@ -97,6 +101,7 @@
         "customizations": "Sugar & Milk Prefs"
     },
     "prompts": {
+        "greet": "नमस्ते! स्वागत है। आप आज क्या लेना चाहेंगे?",
         "drink": "आप कौन सी कॉफी लेना चाहेंगे? लैटे, कैप्पुचिनो या अमेरिकानो?",
         "size": "आपको कौन सा साइज चाहिए? छोटा, मीडियम या बड़ा?",
         "customizations": "आपको चीनी और दूध कैसा चाहिए? (जैसे: चीनी कम, दूध ज़्यादा)"

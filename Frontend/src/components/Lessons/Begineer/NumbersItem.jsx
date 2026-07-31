@@ -7,14 +7,26 @@ const NumbersItem = ({
   hindi, 
   transliteration, 
   example, 
-  sound,
 }) => {
   const audioRef = useRef(null);
 
-  const playSound = () => {
-    if (!audioRef.current) return;
-    audioRef.current.currentTime = 0;
-    audioRef.current.play();
+  const playSound = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/tts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: hindi || transliteration })
+      });
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      if (audioRef.current) {
+        audioRef.current.src = url;
+        audioRef.current.currentTime = 0;
+        audioRef.current.play();
+      }
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
@@ -41,7 +53,7 @@ const NumbersItem = ({
         <Volume2 size={20} />
       </button>
 
-      {sound && <audio ref={audioRef} src={sound} />}
+      <audio ref={audioRef} preload="auto" />
     </div>
   );
 };

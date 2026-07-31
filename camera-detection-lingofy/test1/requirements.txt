@@ -1,0 +1,5 @@
+flask
+flask-cors
+pillow
+ultralytics          # includes YOLOv8, installs torch CPU automatically
+google-generativeai

@@ -1,24 +1,61 @@
 sessions = {}
 
-def init_state(user_id, scene): 
+def _session_key(user_id, scene):
+
+    scene_name = scene.get("scene") if isinstance(scene, dict) else str(scene)
+    return f"{user_id}:{scene_name}"
+
+def init_state(user_id, scene):
     state = {
-        "scene": scene["scene"], 
+        "scene": scene["scene"],
         "slots": {slot: None for slot in scene["slots"]},
-        "status": "ordering"  # Options: ordering, confirming, paying, completed
+        "status": "active",
+        "history": [] # Stack of (slots_dict, status_str)
     }
-    sessions[user_id] = state
+    sessions[_session_key(user_id, scene)] = state
     return state
 
 
-
 def get_state(user_id, scene):
-    if user_id not in sessions:
+    key = _session_key(user_id, scene)
+    if key not in sessions:
         return init_state(user_id, scene)
+    return sessions[key]
+
+
+def save_snapshot(user_id, scene):
+    """Save the current state to history before it gets modified."""
+    state = get_state(user_id, scene)
+    # Store a deep copy of slots and the current status
+    snapshot = {
+        "slots": dict(state["slots"]),
+        "status": state["status"]
+    }
+    state["history"].append(snapshot)
+    # Keep history manageable
+    if len(state["history"]) > 20: 
+        state["history"].pop(0)
+
+
+def undo_state(user_id, scene):
+    """Revert the state to the last saved snapshot."""
+    state = get_state(user_id, scene)
+    if state and state.get("history"):
+        last_snapshot = state["history"].pop()
+        state["slots"] = last_snapshot["slots"]
+        state["status"] = last_snapshot["status"]
+        return True
+    return False
+
+
+def update_slot(user_id, scene, slot, value):
+    key = _session_key(user_id, scene)
+    if key not in sessions:
+        return
+    if "slots" not in sessions[key] or slot not in sessions[key]["slots"]:
+        return
     
-    # Don't auto-reset completed sessions here — let the frontend
-    # explicitly call /reset-session when user wants to replay.
-    return sessions[user_id]
+    # Actually updating
+    sessions[key]["slots"][slot] = value
+    
 
-
-def update_slot(user_id, slot, value):
-    sessions[user_id]["slots"][slot] = value

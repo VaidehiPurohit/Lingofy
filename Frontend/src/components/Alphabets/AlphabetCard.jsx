@@ -1,28 +1,41 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Volume2 } from "lucide-react";
+import { API_BASE_URL } from "../../apiConfig";
 
 const AlphabetCard = ({ letter, english }) => {
   const audioRef = useRef(null);
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
   const speakLetter = async () => {
+    if (isSpeaking) return;
+    setIsSpeaking(true);
+
+    // 1. Prepare player IMMEDIATELY for mobile browser permission
+    if (!audioRef.current) {
+        audioRef.current = new Audio();
+    }
+    const audio = audioRef.current;
+    
     try {
-      const response = await fetch("http://localhost:5000/tts", {
+      const response = await fetch(`${API_BASE_URL}/tts`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ text: letter }), // 🔥 speaks the letter
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: letter }), 
       });
+
+      if (!response.ok) throw new Error(`TTS HTTP ${response.status}`);
 
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
 
-      audioRef.current.src = url;
-      audioRef.current.currentTime = 0;
-      audioRef.current.play();
+      // 2. Play with preserved gesture context
+      audio.src = url;
+      audio.onended = () => setIsSpeaking(false);
+      await audio.play();
 
     } catch (err) {
       console.error("TTS error:", err);
+      setIsSpeaking(false);
     }
   };
 
@@ -42,15 +55,12 @@ const AlphabetCard = ({ letter, english }) => {
 
         <button
           onClick={speakLetter}
-          className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition"
+          className={`p-2 rounded-full transition ${isSpeaking ? "bg-indigo-100 text-indigo-600 animate-pulse" : "bg-gray-100 hover:bg-gray-200 text-gray-600"}`}
+          disabled={isSpeaking}
         >
           <Volume2 size={20} />
         </button>
       </div>
-
-      {/* Hidden Audio Element */}
-      <audio ref={audioRef} preload="auto" />
-
     </div>
   );
 };

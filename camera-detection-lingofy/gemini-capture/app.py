@@ -4,6 +4,17 @@ import base64, json, re, requests, os
 
 app = Flask(__name__, static_folder='static')
 CORS(app)
+
+# ── GEMINI API CONFIGURATION ──────────────────────────────────────────
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+
+if not GEMINI_API_KEY:
+    GEMINI_API_KEY = "MISSING_API_KEY"
+    print("⚠️ WARNING: GEMINI_API_KEY environment variable not set in app.py!")
+
+GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent?key={GEMINI_API_KEY}"
+# ──────────────────────────────────────────────────────────────────────
+
 # ── Prompt ────────────────────────────────────────────────────────────────────
 PROMPT = """You are an object detection system. Analyze this image and identify every distinct visible object.
 
@@ -90,8 +101,8 @@ def index():
 
 @app.route('/detect', methods=['POST'])
 def detect():
-    if GEMINI_API_KEY == "YOUR_API_KEY_HERE":
-        return jsonify({'error': 'API key not set. Edit app.py'}), 401
+    if GEMINI_API_KEY == "MISSING_API_KEY":
+        return jsonify({'error': 'API key not set. Set GEMINI_API_KEY env variable.'}), 401
 
     data = request.get_json()
     if not data or 'image' not in data:
@@ -187,7 +198,7 @@ def detect():
 @app.route('/health')
 def health():
     # Use the global API key check
-    key_set = GEMINI_API_KEY != "YOUR_API_KEY_HERE" and "AIzaSy" in GEMINI_API_KEY
+    key_set = GEMINI_API_KEY != "MISSING_API_KEY" and "AIzaSy" in GEMINI_API_KEY
     return jsonify({'status': 'ok', 'api_key_set': key_set, 'url': GEMINI_URL})
 
 
@@ -195,9 +206,9 @@ if __name__ == '__main__':
     print('\n' + '─'*48)
     print('  WordCam  —  Gemini 2.5 Flash Edition')
     print('─'*48)
-    if GEMINI_API_KEY == "YOUR_API_KEY_HERE":
+    if GEMINI_API_KEY == "MISSING_API_KEY":
         print('  ⚠  No API key set!')
-        print('  Edit app.py → replace YOUR_API_KEY_HERE')
+        print('  Please set the GEMINI_API_KEY environment variable.')
     else:
         print(f'  ✓  API key loaded')
     print('\n  Running at → http://localhost:5000')

@@ -1,7 +1,8 @@
 import React from 'react';
-import { CheckCircle, XCircle, CheckCircle2 } from 'lucide-react';
+import { CheckCircle, XCircle, CheckCircle2, Mic } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { answerQuestions, nextQuestion } from './store/quizSlice';
+import { API_BASE_URL } from '../apiConfig';
 
 function Questions() {
   const dispatch = useDispatch();
@@ -32,17 +33,46 @@ function Questions() {
         <div className="mb-8">
 
           {/* Question Text */}
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 leading-relaxed">
-            {currentQuestion.question}
+          <h2 className="text-2xl font-bold text-slate-800 mb-6 leading-relaxed">
+            {currentQuestion.hindiQuestion && (
+              <div className="text-3xl font-black text-slate-900 mb-3 block">
+                {currentQuestion.hindiQuestion}
+              </div>
+            )}
+            <div className={currentQuestion.hindiQuestion ? "text-lg text-slate-400 font-medium italic" : ""}>
+              {currentQuestion.question}
+            </div>
           </h2>
 
           {/* Audio Player (only shows if question has audio) */}
-          {currentQuestion.type === 'audio' && currentQuestion.audio && (
-            <div className="mb-6">
-              <audio controls className="w-full">
-                <source src={currentQuestion.audio} type="audio/mpeg" />
-                Your browser does not support the audio element.
-              </audio>
+          {currentQuestion.type === 'audio' && (
+            <div className="mb-8 flex flex-col items-center p-8 bg-sky-50 rounded-2xl border-2 border-dashed border-sky-200">
+              <div className="w-16 h-16 bg-sky-500 rounded-full flex items-center justify-center shadow-lg mb-4 animate-pulse">
+                <Mic className="text-white" size={32} />
+              </div>
+              <p className="text-sky-700 font-bold mb-4">Audio Question</p>
+              <button
+                onClick={async () => {
+                  const textToPlay = currentQuestion.options[currentQuestion.correctAnswer];
+                  try {
+                    const response = await fetch(`${API_BASE_URL}/tts`, {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ text: textToPlay })
+                    });
+                    const blob = await response.blob();
+                    const url = URL.createObjectURL(blob);
+                    const audio = new Audio(url);
+                    audio.play();
+                  } catch (err) {
+                    console.error("TTS error:", err);
+                  }
+                }}
+                className="px-8 py-3 bg-white border-2 border-sky-500 text-sky-600 rounded-xl font-bold hover:bg-sky-50 transition-all flex items-center gap-2"
+              >
+                <CheckCircle2 size={20} />
+                Listen Word
+              </button>
             </div>
           )}
 

@@ -1,0 +1,152 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #0d0d1a;
+  min-height: 100vh;
+  color: #222;
+}
+
+/* ── Header ── */
+header {
+  background: #6c63ff;
+  color: #fff;
+  padding: 14px 16px;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: .5px;
+}
+
+/* ── Container ── */
+.container {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+/* ── Screens ── */
+.screen { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.hidden { display: none !important; }
+
+/* ── Live viewfinder ── */
+.viewfinder-wrap {
+  width: 100%;
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 0 0 2px #6c63ff55, 0 8px 32px rgba(108,99,255,.3);
+}
+
+video {
+  width: 100%;
+  display: block;
+  max-height: 70vh;
+  object-fit: cover;
+}
+
+.vf-label {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,.55);
+  color: #fff;
+  font-size: 13px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* ── Buttons ── */
+.big-btn {
+  width: 100%;
+  max-width: 320px;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  background: #6c63ff;
+  color: #fff;
+  transition: background .2s, transform .1s;
+  box-shadow: 0 4px 18px rgba(108,99,255,.4);
+}
+.big-btn:active { transform: scale(.97); }
+.big-btn.secondary {
+  background: #2a2a3d;
+  color: #ccc;
+  box-shadow: none;
+}
+.big-btn.secondary:hover { background: #333358; }
+
+/* ── Canvas (result screen) ── */
+.canvas-wrap { width: 100%; }
+
+canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  cursor: crosshair;
+  box-shadow: 0 4px 20px rgba(108,99,255,.2);
+}
+
+.hint {
+  text-align: center;
+  font-size: 13px;
+  color: #aaa;
+  margin-top: 8px;
+}
+
+/* ── Spinner ── */
+.spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: #aaa;
+  font-size: 14px;
+}
+.spin-ring {
+  width: 40px; height: 40px;
+  border: 4px solid #2a2a3d;
+  border-top-color: #6c63ff;
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Word Card ── */
+.card {
+  position: fixed;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  padding: 18px 20px;
+  border-radius: 18px;
+  width: calc(100% - 32px);
+  max-width: 400px;
+  box-shadow: 0 12px 40px rgba(0,0,0,.35);
+  z-index: 200;
+}
+.card h2 { font-size: 22px; color: #6c63ff; margin-bottom: 4px; }
+.card .translation { font-size: 19px; font-weight: 700; color: #111; margin-bottom: 4px; }
+.card .example     { font-size: 13px; color: #555; margin-bottom: 14px; }
+.card .row { display: flex; gap: 8px; }
+.card button {
+  flex: 1; padding: 11px; border: none; border-radius: 9px;
+  font-size: 14px; font-weight: 700; cursor: pointer; transition: opacity .2s;
+}
+.card button:hover { opacity: .85; }
+.btn-speak { background: #6c63ff; color: #fff; }
+.btn-close { background: #f0f0f0; color: #444; }
+.card-loading { font-size: 14px; color: #999; padding: 6px 0; }

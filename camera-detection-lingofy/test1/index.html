@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lingofy Vision</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header>
+    <h1>🔍 Lingofy Vision</h1>
+  </header>
+
+  <div class="container">
+
+    <!-- SCREEN 1: Live camera viewfinder -->
+    <div id="screen-camera" class="screen">
+      <div class="viewfinder-wrap">
+        <video id="video" autoplay playsinline muted></video>
+        <div class="vf-label">Point camera at anything</div>
+      </div>
+      <button id="captureBtn" class="big-btn">📸 Capture</button>
+    </div>
+
+    <!-- SCREEN 2: Frozen captured frame + detections -->
+    <div id="screen-result" class="screen hidden">
+      <div class="canvas-wrap">
+        <canvas id="canvas"></canvas>
+        <p id="hint" class="hint hidden">Tap a dot to learn the word 👆</p>
+      </div>
+      <div id="spinner" class="spinner hidden">
+        <div class="spin-ring"></div>
+        <p>Detecting objects…</p>
+      </div>
+      <button id="retakeBtn" class="big-btn secondary">🔄 Retake</button>
+    </div>
+
+    <!-- Word card fixed at bottom -->
+    <div id="card" class="card hidden"></div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
