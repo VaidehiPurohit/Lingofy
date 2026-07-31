@@ -7,15 +7,15 @@ import requests
 import subprocess
 
 app = Flask(__name__)
-CORS(app)  # 🔥 Allow React (localhost:5173) to access API
+CORS(app)  
 
-# This securely targets your new Hugging Face Server
+# Hugging Face Server
 HF_SPACE_URL = "https://vai2719-lingofy-speech.hf.space/stt"
 
 
-# =================================
-# TEXT → SPEECH (TTS) (Forwarded to Cloud)
-# =================================
+
+# TEXT → SPEECH 
+
 @app.route("/tts", methods=["POST"])
 def tts():
     data = request.get_json()
@@ -37,10 +37,8 @@ def tts():
         print(f"HF TTS Error: {e}")
         return jsonify({"error": str(e)}), 500
 
+# SPEECH → TEXT 
 
-# =================================
-# SPEECH → TEXT (STT) (Forwarded to Cloud API)
-# =================================
 @app.route("/stt", methods=["POST"])
 def stt():
     if "file" not in request.files:
@@ -68,7 +66,7 @@ def stt():
         print(f"Error accessing Hugging Face Cloud Server: {e}")
         transcribed_text = "Error connecting to cloud server."
 
-    # --- GET AUDIO FEEDBACK (Local) ---
+    # GET AUDIO FEEDBACK 
     scene_name = request.form.get("scene", "Unknown Scene")
     
     import sys
@@ -89,10 +87,7 @@ def stt():
 
     return jsonify({"text": transcribed_text, "audio_feedback": audio_feedback})
 
-
-# =================================
-# ROOT ROUTE (Health Check)
-# =================================
+# ROOT ROUTE 
 @app.route("/")
 def home():
     return "Hybrid Cloud Speech Proxy Running 🚀"

@@ -1,4 +1,4 @@
-# Lazy imports to reduce startup time
+
 _sentence_transformers = None
 _util = None
 
@@ -10,7 +10,6 @@ def _get_sentence_transformers():
         _util = util
     return _sentence_transformers, _util
 
-# Lazy load the model to reduce startup memory
 _model = None
 
 def _get_model():
@@ -23,7 +22,7 @@ def _get_model():
     return _model
 
 def get_similarity(text1, text2):
-    # This helper function compares two strings and returns a score from 0 to 1
+    #  returns a score from 0 to 1
     model = _get_model()
     SentenceTransformer, util = _get_sentence_transformers()
     emb1 = model.encode(text1, convert_to_tensor=True)

@@ -5,8 +5,7 @@ import re
 import time
 import base64
 
-# ── GEMINI API CONFIGURATION ──────────────────────────────────────────
-# Only read API keys from environment. Hardcoding keys is a security risk.
+# GEMINI API CONFIGURATION
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 GEMINI_MODEL = "gemini-3.1-flash-lite-preview"
 
@@ -20,7 +19,6 @@ def generate_audio_feedback(audio_path, scene_title, expected_text=""):
     if not GEMINI_URL:
         return generate_audio_fallback_feedback(scene_title)
 
-    # Check file size - skip if too large (reduce API load)
     try:
         file_size = os.path.getsize(audio_path)
         if file_size > 1024 * 1024:  # 1MB limit
@@ -29,7 +27,7 @@ def generate_audio_feedback(audio_path, scene_title, expected_text=""):
     except:
         pass
     
-    # Read and encode the audio file
+    # Read & encode the audio file
     try:
         with open(audio_path, "rb") as f:
             audio_data = base64.b64encode(f.read()).decode("utf-8")
@@ -75,10 +73,10 @@ Return ONLY JSON:
         "generationConfig": {"temperature": 0.2, "maxOutputTokens": 256}
     }
 
-    # Retry logic if rate-limited
+    # Retry logic
     for attempt in range(2):
         try:
-            resp = requests.post(GEMINI_URL, json=payload, timeout=12)
+            resp = requests.post(GEMINI_URL, json=payload, timeout=45)
             
             if resp.status_code == 429:
                 print(f"[Audio Feedback] Rate limited, retrying in 1s... (attempt {attempt+1})")
@@ -88,7 +86,6 @@ Return ONLY JSON:
             resp.raise_for_status()
             raw_text = resp.json()['candidates'][0]['content']['parts'][0]['text'].strip()
             
-            # Extract JSON from response
             match = re.search(r'\{.*\}', raw_text, re.DOTALL)
             if match:
                 return json.loads(match.group())

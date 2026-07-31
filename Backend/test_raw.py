@@ -1,7 +1,6 @@
 import requests, re, json
 import os
 
-# IMPORTANT: never hardcode API keys in git-tracked files.
 key = os.environ.get("GEMINI_API_KEY")
 if not key:
     raise SystemExit("Set GEMINI_API_KEY env var to run this test.")

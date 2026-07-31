@@ -31,15 +31,32 @@ const Login = () => {
         
         try {
             const endpoint = state === "login" ? "/api/login" : "/api/signup";
+            const bodyData = formData;
+            
             const response = await fetch(`${API_BASE_URL}${endpoint}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(bodyData)
             });
             
             const data = await response.json();
             
             if (response.ok) {
+                // Clear stale data from any previous user sessions
+                localStorage.removeItem("lingofy_study_seconds");
+                localStorage.removeItem("lingofy_streak");
+                localStorage.removeItem("lingofy_level");
+                localStorage.removeItem("lingofy_daily_goal");
+                localStorage.removeItem("lingofy_avg_accuracy");
+
+                if (state === "login") {
+                    // Existing user logging in: assume they already bypassed or took the quiz
+                    localStorage.setItem("lingofy_quiz_taken", "true");
+                } else {
+                    // Brand new user signing up: clear the flag to show the quiz
+                    localStorage.removeItem("lingofy_quiz_taken");
+                }
+
                 // Save actual DB user ID and profile
                 localStorage.setItem("lingofy_user", JSON.stringify(data.user));
                 navigate("/dashboard");
@@ -106,14 +123,6 @@ const Login = () => {
                             <input type="password" name="password" placeholder="Password" className="w-full bg-transparent text-slate-800 placeholder-slate-400 border-none outline-none font-medium h-full" value={formData.password} onChange={handleChange} required />
                         </div>
                     </div>
-
-                    {state === "login" && (
-                        <div className="mt-4 text-right">
-                            <button type="button" className="text-sm font-semibold text-indigo-500 hover:text-indigo-600 hover:underline transition-colors">
-                                Forgot password?
-                            </button>
-                        </div>
-                    )}
 
                     <button type="submit" disabled={isLoading} className="mt-8 relative group w-full h-14 flex items-center justify-center gap-2 rounded-2xl bg-slate-900 overflow-hidden hover:bg-slate-800 transition-all disabled:opacity-70 disabled:cursor-not-allowed shadow-xl shadow-slate-900/20" >
                         <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />

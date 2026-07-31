@@ -8,12 +8,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# ── GEMINI API CONFIGURATION ──────────────────────────────────────────
+# GEMINI API CONFIGURATION 
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 GEMINI_MODEL = "gemini-3.1-flash-lite-preview"
 
 if not GEMINI_API_KEY:
-    GEMINI_API_KEY = None # Ensure it's None, not "MISSING_API_KEY"
+    GEMINI_API_KEY = None 
 
 GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}" if GEMINI_API_KEY else None
 # ──────────────────────────────────────────────────────────────────────
@@ -27,8 +27,7 @@ def generate_turn_feedback(user_text, scene, state, extracted_entities=None, exp
     current_goal = missing_slots[0] if missing_slots else "conversation completion"
     goal_label = scene.get("goal_labels", {}).get(current_goal, current_goal)
     
-    # ── LOCAL NLP ANALYSIS ─────────────────
-    # Perform local syntactic check (faster, more objective)
+    #  LOCAL NLP ANALYSIS 
     local_deduction, local_points = analyze_hindi_grammar(user_text)
 
     prompt = f"""You are an encouraging and supportive Hindi language partner helping a student practice their conversational skills.

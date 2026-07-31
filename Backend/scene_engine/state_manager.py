@@ -1,8 +1,7 @@
 sessions = {}
 
 def _session_key(user_id, scene):
-    # Key state by both user and scene to avoid slot/status desync.
-    # `scene` is the full scene JSON loaded by `scene_loader.load_scene()`.
+
     scene_name = scene.get("scene") if isinstance(scene, dict) else str(scene)
     return f"{user_id}:{scene_name}"
 
@@ -59,5 +58,4 @@ def update_slot(user_id, scene, slot, value):
     # Actually updating
     sessions[key]["slots"][slot] = value
     
-    # 🚫 AUTO-COMPLETE REMOVED: Status is now handled exclusively 
-    # by dialogue_manager.py (checks for Closing intent) to prevent glitches.
+

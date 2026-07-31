@@ -14,16 +14,16 @@ const PlacementQuiz = ({ onComplete }) => {
   const fetchNextQuestion = async (currentPoints, currentAsked) => {
     setLoading(true);
     try {
-        const url = `${API_BASE_URL}/api/placement-quiz/next?points=${currentPoints}&asked=${currentAsked.join(',')}`;
-        const res = await fetch(url);
-        const data = await res.json();
-        setCurrentQuestionData(data);
+      const url = `${API_BASE_URL}/api/placement-quiz/next?points=${currentPoints}&asked=${currentAsked.join(',')}`;
+      const res = await fetch(url);
+      const data = await res.json();
+      setCurrentQuestionData(data);
     } catch (err) {
-        console.error("Fallback to basic logic:", err);
-        // Fallback question
-        setCurrentQuestionData({id: 99, q: "Translate 'Hello'", options: ["नमस्ते", "अलविदा"], correct: 0, difficulty: 10});
+      console.error("Fallback to basic logic:", err);
+      // Fallback question
+      setCurrentQuestionData({ id: 99, q: "Translate 'Hello'", options: ["नमस्ते", "अलविदा"], correct: 0, difficulty: 10 });
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
   };
 
@@ -36,11 +36,11 @@ const PlacementQuiz = ({ onComplete }) => {
   const handleAnswer = (index) => {
     // Basic point-weighting algorithm (Student Logic)
     const isCorrect = index === currentQuestionData.correct;
-    
+
     // Add points if right, subtract if wrong to jump around difficulty array
     const newPoints = isCorrect ? points + 20 : points - 20;
     setPoints(newPoints);
-    
+
     // Mark as asked
     const newAsked = [...askedIds, currentQuestionData.id];
     setAskedIds(newAsked);
@@ -49,7 +49,7 @@ const PlacementQuiz = ({ onComplete }) => {
 
     // Fetch next state or complete
     if (newCount < MAX_QUESTIONS) {
-        fetchNextQuestion(newPoints, newAsked);
+      fetchNextQuestion(newPoints, newAsked);
     } else {
       setCurrentStep(2);
       finishQuiz(newPoints);
@@ -70,11 +70,11 @@ const PlacementQuiz = ({ onComplete }) => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: user.email, level: level })
         });
-        
+
         // Update local storage too
         const newUser = { ...user, level: level };
         localStorage.setItem("lingofy_user", JSON.stringify(newUser));
-        if (onComplete) onComplete(level);
+        // We intentionally DO NOT call onComplete here so the user can read the result screen.
       }
     } catch (err) {
       console.error("Failed to update level:", err);
@@ -89,7 +89,7 @@ const PlacementQuiz = ({ onComplete }) => {
         </div>
         <h2 className="text-3xl font-bold text-gray-800">Analyze Your Level</h2>
         <p className="text-gray-500">Take this quick 2-minute quiz to unlock the right lessons for your skills.</p>
-        <button 
+        <button
           onClick={() => setCurrentStep(1)}
           className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-indigo-700 transition-all"
         >
@@ -101,25 +101,25 @@ const PlacementQuiz = ({ onComplete }) => {
 
   if (currentStep === 1) {
     if (loading || !currentQuestionData) {
-        return (
-            <div className="bg-white rounded-3xl p-8 shadow-xl border border-indigo-100 max-w-2xl mx-auto space-y-8 flex flex-col items-center justify-center min-h-[300px]">
-                <div className="animate-spin w-10 h-10 border-4 border-indigo-200 border-t-indigo-600 rounded-full mb-4"></div>
-                <h3 className="text-xl font-bold text-gray-700 animate-pulse">Calculating Adaptive Difficulty...</h3>
-            </div>
-        )
+      return (
+        <div className="bg-white rounded-3xl p-8 shadow-xl border border-indigo-100 max-w-2xl mx-auto space-y-8 flex flex-col items-center justify-center min-h-[300px]">
+          <div className="animate-spin w-10 h-10 border-4 border-indigo-200 border-t-indigo-600 rounded-full mb-4"></div>
+          <h3 className="text-xl font-bold text-gray-700 animate-pulse">Calculating Adaptive Difficulty...</h3>
+        </div>
+      )
     }
 
     return (
       <div className="bg-white rounded-3xl p-8 shadow-xl border border-indigo-100 max-w-2xl mx-auto space-y-8">
         <div className="flex justify-between items-center">
-            <span className="text-sm font-bold text-indigo-600 uppercase tracking-widest">Question {questionsAnswered + 1} / {MAX_QUESTIONS}</span>
-            <div className="h-2 w-32 bg-gray-100 rounded-full overflow-hidden">
-                <div className="h-full bg-indigo-500 transition-all duration-300" style={{ width: `${((questionsAnswered + 1) / MAX_QUESTIONS) * 100}%` }} />
-            </div>
+          <span className="text-sm font-bold text-indigo-600 uppercase tracking-widest">Question {questionsAnswered + 1} / {MAX_QUESTIONS}</span>
+          <div className="h-2 w-32 bg-gray-100 rounded-full overflow-hidden">
+            <div className="h-full bg-indigo-500 transition-all duration-300" style={{ width: `${((questionsAnswered + 1) / MAX_QUESTIONS) * 100}%` }} />
+          </div>
         </div>
-        
+
         <h3 className="text-2xl font-bold text-gray-800">{currentQuestionData.q}</h3>
-        
+
         <div className="grid grid-cols-1 gap-4">
           {currentQuestionData.options.map((opt, idx) => (
             <button
@@ -146,9 +146,13 @@ const PlacementQuiz = ({ onComplete }) => {
       <div className="py-2 px-6 bg-indigo-600 text-white rounded-full inline-block text-xl font-bold shadow-lg shadow-indigo-200">
         {points > 70 ? "Advanced" : points >= 30 ? "Intermediate" : "Beginner"}
       </div>
-      <p className="text-gray-400 text-sm mt-4">We've personalized your learning path accordingly.</p>
-      <button 
-        onClick={() => window.location.reload()}
+      <p className="text-gray-400 text-sm mt-4"> </p>
+      <button
+        onClick={() => {
+          const finalLevel = points > 70 ? "Advanced" : points >= 30 ? "Intermediate" : "Beginner";
+          if (onComplete) onComplete(finalLevel);
+          else window.location.reload();
+        }}
         className="w-full py-4 bg-gray-900 text-white rounded-2xl font-bold hover:bg-gray-800 transition-all"
       >
         Go to Dashboard

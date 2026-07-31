@@ -6,7 +6,7 @@ import re
 GEMINI_MODEL = "gemini-3.1-flash-lite-preview"
 GEMINI_URL = f'https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}'
 
-# --- Test 1: Basic Feedback + Reply JSON parse ---
+#  Basic Feedback + Reply JSON parse 
 print("=" * 60)
 print("TEST 1: Gemini Scene Response (Cafe scene, student says namaste)")
 print("=" * 60)

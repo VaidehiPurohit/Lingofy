@@ -369,7 +369,7 @@ def _call_cloud_stt(audio_bytes, filename="recording.webm", content_type="audio/
                     url,
                     files={'file': (filename, audio_bytes, content_type)},
                     headers={'ngrok-skip-browser-warning': 'true'},
-                    timeout=25
+                    timeout=60
                 )
                 if resp.status_code == 200:
                     text = resp.json().get("text", "").strip()
@@ -628,7 +628,7 @@ def vision_detect():
                     }]
                 }
                 
-                v_res = requests.post(GEMINI_URL, json=vision_payload, timeout=12)
+                v_res = requests.post(GEMINI_URL, json=vision_payload, timeout=45)
                 v_data = v_res.json()
                 v_text = v_data['candidates'][0]['content']['parts'][0]['text']
                 

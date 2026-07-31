@@ -8,7 +8,6 @@ _SENTENCE_TRANSFORMERS_MODEL_NAME = "all-MiniLM-L6-v2"
 _model = None
 _scene_cache = {}
 # Safe-by-default: SBERT on, with fallback to fuzzy when unavailable.
-# Set LINGOFY_USE_SBERT=0 to force-disable.
 _USE_SBERT = os.environ.get("LINGOFY_USE_SBERT", "1") == "1"
 
 
@@ -136,7 +135,7 @@ def extract_entities(text: str, scene: dict, allowed_slots: Optional[List[str]] 
             if best_score == 1.0 and extracted.get(slot) == canonical:
                 break
 
-    # 2) If nothing matched via keywords, use semantic matching.
+    # If nothing matched via keywords, use semantic matching.
     # Prefer SBERT only when enabled via LINGOFY_USE_SBERT=1.
     # Otherwise use a lightweight fuzzy matcher to keep runtime stable.
     if not extracted:

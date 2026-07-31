@@ -5,8 +5,7 @@ import requests
 import time
 from functools import lru_cache
 
-# ── GEMINI API CONFIGURATION ──────────────────────────────────────────
-# Only read API keys from environment. Hardcoding keys is a security risk.
+# GEMINI API CONFIGURATION 
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 GEMINI_MODEL = "gemini-3.1-flash-lite-preview" # Matching the 3.1 model preferred by the user
 
@@ -15,9 +14,8 @@ GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_M
 
 # Simple rate limiting
 _last_request_time = 0.0
-_min_request_interval = 1.0  # Minimum 1 second between requests
+_min_request_interval = 1.0 
 
-# Simple in-memory cache for API responses
 _response_cache = {}
 _cache_max_size = 50
 
@@ -102,7 +100,6 @@ JSON FORMAT ONLY:
             "feedback": generate_fallback_feedback(user_text, scene, state, extracted_entities, target_prompt)
         }
 
-    # Rate limiting
     global _last_request_time
     current_time = time.time()
     time_since_last = current_time - _last_request_time
@@ -111,7 +108,7 @@ JSON FORMAT ONLY:
     _last_request_time = time.time()
 
     try:
-        resp = requests.post(GEMINI_URL, json=payload, timeout=12)
+        resp = requests.post(GEMINI_URL, json=payload, timeout=45)
         resp.raise_for_status()
         raw_text = resp.json()['candidates'][0]['content']['parts'][0]['text'].strip()
 
@@ -191,7 +188,7 @@ def generate_fallback_feedback(user_text, scene, state, extracted_entities=None,
     else:
         suggestion = f"Try: '{user_text}' (focus on clear pronunciation)"
     
-    score = 75  # Slightly lower than API success to indicate fallback
+    score = 75  
     
     return {
         "overall_score": score,

@@ -1,8 +1,8 @@
 from ultralytics import YOLO
 import os
 
-# YOLOv8 nano — fastest model, optimized for CPU
-# __file__ = Backend/scene_engine/vision_detector.py → parent = Backend/
+# YOLOv8 nano
+
 MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "yolov8n.pt")
 model = YOLO(MODEL_PATH)
 

@@ -48,6 +48,12 @@ const Profile = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("lingofy_user");
+    localStorage.removeItem("lingofy_quiz_taken");
+    localStorage.removeItem("lingofy_study_seconds");
+    localStorage.removeItem("lingofy_streak");
+    localStorage.removeItem("lingofy_level");
+    localStorage.removeItem("lingofy_daily_goal");
+    localStorage.removeItem("lingofy_avg_accuracy");
     navigate("/");
   };
 
@@ -102,7 +108,7 @@ const Profile = () => {
                 Language: {language}
               </span>
               <span className="px-5 py-2 rounded-2xl bg-white/15 backdrop-blur-md border border-white/10 text-sm font-bold">
-                Level:
+                Level: {user.level || localStorage.getItem('lingofy_level') || 'Beginner'}
               </span>
             </div>
           </div>
